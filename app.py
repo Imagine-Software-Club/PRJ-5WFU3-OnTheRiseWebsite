@@ -13,6 +13,9 @@ def read_root(request: Request):
     return templates.TemplateResponse('home.html', {'request': request})
 
 #-Upcoming Events Page
+@app.get("/", response_class = HTMLResponse)
+def read_root(request: Request):
+    return templates.TemplateResponse('upcoming.html', {'request': request})
 
 #-Past Events Page
 

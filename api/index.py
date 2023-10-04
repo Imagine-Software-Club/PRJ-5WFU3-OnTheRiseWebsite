@@ -1,13 +1,27 @@
 from fastapi import FastAPI
 app = FastAPI()
 
-
-@app.get("/")
-def landing_page():
-    return {"message": "Hello World"}
+#- Sample Database
+data = {"Upcoming" : {"Volunteer at...": {"Date": "Sunday", "Description": "afdkdaj;ljad;jf;lajd;fjadfajfh"}}}
 
 
-@app.get("/api/python")
-def hello_world():
-    print("Got to the hello world page")
-    return {"message": "Hello World"}
+
+@app.get("/upcoming")
+def upcoming():
+    return {"message": data["Upcoming"]}
+
+@app.get("/past")
+def past():
+    return {"message": "Past Events"}
+
+@app.get("/pictures")
+def pictures():
+    return {"message": "Pictures"}
+
+@app.get("/contact")
+def contact():
+    return {"message": "Contact"}
+
+@app.get("/about_us")
+def about():
+    return {"message": "About Us"}

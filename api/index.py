@@ -48,6 +48,21 @@ def hello_world():
 	return {"message": "Hello World"}
 
 
+class ItemTest(BaseModel):
+    name: str
+    description: str | None = None
+    price: float
+    tax: float | None = None
+
+@app.post("/test/")
+async def create_item(item: ItemTest):
+    item_dict = item.dict()
+    if item.tax:
+        price_with_tax = item.price + item.tax
+        item_dict.update({"price_with_tax": price_with_tax})
+    return item_dict
+
+
 
 
 #------------
@@ -73,10 +88,7 @@ class Event(BaseModel):
 	keyWords: str
 
 @app.post("/upcoming/post")
-def upcomingPost(item: Event):
-    # Add the new event to the set of upcoming events
-    upcoming.add(item.name)
-
+async def upcomingPost(item: Event):
     # Create and add info to dictionary
     events[item.name] = {
         "id": item.ID,
@@ -85,6 +97,8 @@ def upcomingPost(item: Event):
         "pictures": item.pictures,
         "key words": item.keyWords
     }
+
+    print(events)
 
     # Return the added event
     return {"Upcoming": events[item.name]}

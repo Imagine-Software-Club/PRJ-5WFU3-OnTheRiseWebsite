@@ -18,29 +18,12 @@ const nextConfig = {
             : "/api/",
       },
       {
-        source: "/pictures",
+        source: "/profiles",
         destination:
           process.env.NODE_ENV === "development"
-            ? "http://127.0.0.1:8000/pictures"
+            ? "http://127.0.0.1:8000/profiles"
             : "/api/",
       },
-      {
-        source: "/contact",
-        destination:
-          process.env.NODE_ENV === "development"
-            ? "http://127.0.0.1:8000/contact"
-            : "/api/",
-      },
-
-      {
-        source: "/about_us",
-        destination:
-          process.env.NODE_ENV === "development"
-            ? "http://127.0.0.1:8000/about_us"
-            : "/api/",
-      },
-
-
       {
         source: "/docs",
         destination:

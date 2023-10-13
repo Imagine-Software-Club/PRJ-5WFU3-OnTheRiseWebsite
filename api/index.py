@@ -109,6 +109,8 @@ async def upcomingPost(item: Event):
 def pastEvents():
 	result = []
 	#Add all past events into result
+	for i in past:
+		result.append(events[i])
 
 	return {"Past Events": result}
 

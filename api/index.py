@@ -109,6 +109,8 @@ async def upcomingPost(item: Event):
 def pastEvents():
 	result = []
 	#Add all past events into result
+	for i in past:
+		result.append(events[i])
 
 	return {"Past Events": result}
 
@@ -138,10 +140,17 @@ def profiles():
 
 #Signup/Login
 @app.get("/login")
-def login():
+def login(username: str, password: str):
 	result = []
-	#Check to see if User exists, if they do add to result
+	# Check to see if User exists, if they do add to result
 
+	if username in currentUsers:
+		if password == users[username]["password"]:
+			result.append(users[username])
+		else:
+			result.append("Incorrect Password")
+	else:
+		result.append("Incorrect Username")
 	return {"User": result}
 
 @app.post("/signup")

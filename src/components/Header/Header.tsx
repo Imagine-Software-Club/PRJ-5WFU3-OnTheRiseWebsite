@@ -1,7 +1,5 @@
-import { Box, Link, Stack, Typography } from "@mui/material";
-import React, { useState } from "react";
-import OnTheRiseLogo from "../../../public/images/OnTheRiseLogo.png";
-import Image from "next/image";
+import { Link, Stack } from "@mui/material";
+import React from "react";
 import { map as _map } from "lodash";
 
 const headerLink = [
@@ -17,62 +15,54 @@ const headerLink = [
     href: "/contact-us",
     text: "Contact Us",
   },
+  {
+    href: "/about",
+    text: "About",
+  },
 ];
 
 export const Header = () => {
   return (
     <Stack
       sx={{
-        background: "grey",
-        height: "75px",
+        background: "#1B1B1B",
+        height: ["50px", "65px", "75px"],
         borderBottom: "1px solid gold",
         position: "sticky",
-        justifyContent: "space-between", // Center horizontally
+        justifyContent: "center", // Center horizontally
         alignItems: "center", // Center vertically
         flexDirection: "row",
         zIndex: "1000",
         top: "0",
       }}
     >
-      <Stack sx={{ flexDirection: "row", alignItems: "center" }}>
-        <Image
-          src={OnTheRiseLogo}
-          alt="On The Rise Logo"
-          height={75}
-          width={75}
-        />
-        <Typography
-          sx={{ fontSize: "30px", fontFamily: "Anton", color: "#FFD700" }}
-        >
-          On The Rise
-          <Typography
-            component="span"
-            sx={{
-              color: "darkgreen",
-              fontSize: "30px",
-              fontFamily: "Anton",
-              ml: "5px",
-            }}
-          >
-            MSU
-          </Typography>
-        </Typography>
-      </Stack>
-      <Stack sx={{ flexDirection: "row" }}>
-        {_map(headerLink, (linkInfo) => (
-          <Link
-            href={linkInfo.href}
-            sx={{
-              mx: "10px",
-              color: "black",
-              textDecoration: "none",
-              ":hover": {
-                color: "#FFD700",
-              },
-            }}
-          >
-            {linkInfo.text}
-          </Link>
+      <Stack
+        sx={{
+          flexDirection: "row",
+          color: "#DAA520",
+          fontSize: ["15px", "20px", "25px"],
+        }}
+      >
+        {_map(headerLink, (linkInfo, index) => (
+          <>
+            <Link
+              href={linkInfo.href}
+              sx={{
+                mx: ["5px", "25px"],
+                textDecoration: "none",
+                color: "#DAA520",
+                transition: "color 0.3s ease, transform 0.5s ease",
+                fontFamily: "Lobster",
+                ":hover": {
+                  color: "#FFD700",
+                  transform: "scale(1.4)",
+                },
+              }}
+            >
+              {linkInfo.text}
+            </Link>
+            {index !== headerLink.length - 1 && "|"}
+          </>
         ))}
       </Stack>
     </Stack>

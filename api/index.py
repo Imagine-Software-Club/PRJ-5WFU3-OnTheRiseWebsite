@@ -1,9 +1,17 @@
 from fastapi import FastAPI
-
 app = FastAPI()
 
 from pydantic import BaseModel
 
+#Firebase
+import firebase_admin
+from firebase_admin import credentials, firestore
+
+cred = credentials.Certificate('./serviceAccountKey.json')
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+
+#Sample Database - Will delete after Database is integrated
 events = {
     "Event 1": {
         "id": 1,
@@ -24,10 +32,8 @@ events = {
 past = {"Event 1"}
 upcoming = {"Event 2"}
 
-
 users = {"username": {"id": 1001, "password": "123456789", "email": "sample@msu.edu"}}
 
-currentUsers = {"username"}
 
 
 # Starting Endpoints
@@ -41,7 +47,7 @@ def hello_world():
     print("Got to the hello world page")
     return {"message": "Hello World"}
 
-
+'''
 class ItemTest(BaseModel):
     name: str
     description: str | None = None
@@ -56,7 +62,7 @@ async def create_item(item: ItemTest):
         price_with_tax = item.price + item.tax
         item_dict.update({"price_with_tax": price_with_tax})
     return item_dict
-
+'''
 
 # ------------
 # - Events
@@ -78,7 +84,7 @@ class Event(BaseModel):
     name: str
     ID: int
     date: str
-    description: str | None = None
+    description: str
     pictures: str
     keyWords: str
 

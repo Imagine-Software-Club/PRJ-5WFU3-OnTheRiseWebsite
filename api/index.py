@@ -11,30 +11,34 @@ cred = credentials.Certificate('./serviceAccountKey.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-#Sample Database - Will delete after Database is integrated
-events = {
-    "Event 1": {
-        "id": 1,
-        "date": "10/08/2023",
-        "description": "Sample...",
-        "pictures": "Picture ID",
-        "key words": "Education",
-    },
-    "Event 2": {
-        "id": 2,
-        "date": "10/12/2023",
-        "description": "Sample...",
-        "pictures": "Picture ID",
-        "key words": "Education",
-    },
-}
 
 past = {"Event 1"}
 upcoming = {"Event 2"}
 
 users = {"username": {"id": 1001, "password": "123456789", "email": "sample@msu.edu"}}
 
+"""
+# Adding to Firebase DB 
+doc_ref = db.collection("events").document("Event 1")
+doc_ref.set({
+        "name": "Event 1",
+        "id": 1,
+        "date": "10/08/2023",
+        "description": "Sample...",
+        "pictures": "Picture ID",
+        "key words": "Education",
+})
 
+doc_ref = db.collection("events").document("Event 2")
+doc_ref.set({
+    "name": "Event 2",
+    "id": 2,
+    "date": "10/12/2023",
+    "description": "Sample...",
+    "pictures": "Picture ID",
+    "key words": "Education",
+})
+"""
 
 # Starting Endpoints
 @app.get("/")
@@ -73,10 +77,23 @@ async def create_item(item: ItemTest):
 @app.get("/upcoming")
 def upcomingEvents():
     result = []
-    for i in upcoming:  # Goes through names in set, and uses to retrieve from data
-        result.append(events[i])
 
-    return {"Upcoming": result}
+    events_ref = db.collection("events")
+
+    docs = events_ref.stream()
+
+    for doc in docs:
+        if doc.exists:
+            this_event = doc.to_dict()
+            if this_event["Type"] == "Upcoming":
+                result.append(this_event)
+        else:
+            print("Document does not exist!")
+    
+    return {"Upcoming Events": result}
+
+
+    #return data
 
 
 # Schema for Event, used to add data via post request
@@ -87,33 +104,37 @@ class Event(BaseModel):
     description: str
     pictures: str
     keyWords: str
+    type: str
 
 
 @app.post("/upcoming/post")
 async def upcomingPost(item: Event):
-    # Create and add info to dictionary
-    events[item.name] = {
-        "id": item.ID,
-        "date": item.date,
-        "description": item.description,
-        "pictures": item.pictures,
-        "key words": item.keyWords,
-    }
 
-    print(events)
+    doc_ref = db.collection("events").document(item.name)
+    doc_ref.set({"Date": item.date, "Description": item.description, "Key_Words": item.keyWords,
+                 "Name": item.name, "Type": "Upcoming"})
 
     # Return the added event
-    return {"Upcoming": events[item.name]}
+    return {"Upcoming": doc_ref}
 
 
 # Past Events
 @app.get("/past")
 def pastEvents():
     result = []
-    # Add all past events into result
-    for i in past:
-        result.append(events[i])
+    
+    events_ref = db.collection("events")
 
+    docs = events_ref.stream()
+
+    for doc in docs:
+        if doc.exists:
+            this_event = doc.to_dict()
+            if this_event["Type"] == "Past":
+                result.append(this_event)
+        else:
+            print("Document does not exist!")
+    
     return {"Past Events": result}
 
 
@@ -121,6 +142,11 @@ def pastEvents():
 def pastPost(item: Event):
     result = []
     # Add event from upcoming into past
+    doc_ref = db.collection("events").document(item.name)
+    data_to_update = {"Date": item.date, "Description": item.description, "Key_Words": item.keyWords,
+                 "Name": item.name, "Type": "Past"}
+    doc_ref.update(data_to_update)
+
 
     # Delete from upcoming
 
@@ -148,7 +174,7 @@ def login(username: str, password: str):
     result = []
     # Check to see if User exists, if they do add to result
 
-    if username in currentUsers:
+    if username in users:
         if password == users[username]["password"]:
             result.append(users[username])
         else:

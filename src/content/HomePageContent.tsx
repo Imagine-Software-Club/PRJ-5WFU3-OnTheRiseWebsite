@@ -1,6 +1,10 @@
 import { Box, Stack, Typography } from "@mui/material";
 import OnTheRiseLogo from "../../public/images/OnTheRiseLogo.png";
 import Image from "next/image";
+import ExecutiveBoard from "../components/ExecutiveBoard";
+import OurMission from "../components/OurMission";
+import ContactUs from "../components/ContactUs";
+import EventsHome from "../components/EventsHome";
 
 export const HomePageContent = () => {
   return (
@@ -20,6 +24,10 @@ export const HomePageContent = () => {
           objectFit: "fill",
         }}
       />
+      <OurMission />
+      <EventsHome />
+      <ExecutiveBoard />
+      <ContactUs />
     </Stack>
   );
 };

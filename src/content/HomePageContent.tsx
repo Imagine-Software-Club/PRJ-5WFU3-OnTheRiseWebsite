@@ -1,5 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 import OnTheRiseLogo from "../../public/images/OnTheRiseLogo.png";
+import SearchIcon from "../../public/images/Search_Icon.jpg";
 import Image from "next/image";
 import ExecutiveBoard from "../components/ExecutiveBoard";
 import OurMission from "../components/OurMission";

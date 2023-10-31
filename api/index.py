@@ -12,11 +12,6 @@ firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 
-past = {"Event 1"}
-upcoming = {"Event 2"}
-
-users = {"username": {"id": 1001, "password": "123456789", "email": "sample@msu.edu"}}
-
 """
 # Adding to Firebase DB 
 doc_ref = db.collection("events").document("Event 1")
@@ -45,35 +40,11 @@ doc_ref.set({
 def landing_page():
     return {"message": "Hello World"}
 
-
-@app.get("/api/python")
-def hello_world():
-    print("Got to the hello world page")
-    return {"message": "Hello World"}
-
-'''
-class ItemTest(BaseModel):
-    name: str
-    description: str | None = None
-    price: float
-    tax: float | None = None
-
-
-@app.post("/test/")
-async def create_item(item: ItemTest):
-    item_dict = item.dict()
-    if item.tax:
-        price_with_tax = item.price + item.tax
-        item_dict.update({"price_with_tax": price_with_tax})
-    return item_dict
-'''
-
 # ------------
 # - Events
 # ------------
 
-
-# Upcoming Events - Example Code
+# Upcoming Events
 @app.get("/upcoming")
 def upcomingEvents():
     result = []
@@ -93,10 +64,8 @@ def upcomingEvents():
     return {"Upcoming Events": result}
 
 
-    #return data
 
-
-# Schema for Event, used to add data via post request
+# Schema for Event
 class Event(BaseModel):
     name: str
     ID: int
@@ -109,12 +78,10 @@ class Event(BaseModel):
 
 @app.post("/upcoming/post")
 async def upcomingPost(item: Event):
-
     doc_ref = db.collection("events").document(item.name)
     doc_ref.set({"Date": item.date, "Description": item.description, "Key_Words": item.keyWords,
                  "Name": item.name, "Type": "Upcoming"})
 
-    # Return the added event
     return {"Upcoming": doc_ref}
 
 
@@ -141,54 +108,31 @@ def pastEvents():
 @app.post("/past")
 def pastPost(item: Event):
     result = []
-    # Add event from upcoming into past
+
     doc_ref = db.collection("events").document(item.name)
     data_to_update = {"Date": item.date, "Description": item.description, "Key_Words": item.keyWords,
                  "Name": item.name, "Type": "Past"}
     doc_ref.update(data_to_update)
 
-
-    # Delete from upcoming
-
-    # Check to see if worked by going to /upcoming and /past
     return {"Past Events": result}
 
 
 # ------------
-# - Users
+# - OTR Members
 # ------------
-
-
-# All Profiles
-@app.get("/profiles")
-def profiles():
+@app.get("/members")
+def upcomingEvents():
     result = []
-    # Add all profiles into result
 
-    return {"Users": result}
+    members_ref = db.collection("Members")
 
+    docs = members_ref.stream()
 
-# Signup/Login
-@app.get("/login")
-def login(username: str, password: str):
-    result = []
-    # Check to see if User exists, if they do add to result
-
-    if username in users:
-        if password == users[username]["password"]:
-            result.append(users[username])
+    for doc in docs:
+        if doc.exists:
+            the_member = doc.to_dict()
+            result.append(the_member)
         else:
-            result.append("Incorrect Password")
-    else:
-        result.append("Incorrect Username")
-    return {"User": result}
-
-
-@app.post("/signup")
-def signup():
-    result = []
-    # Create a user
-
-    # Add new user to result
-
-    return {"New User": result}
+            print("Document does not exist!")
+    
+    return {"OTR Members": result}

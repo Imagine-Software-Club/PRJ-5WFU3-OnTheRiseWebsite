@@ -6,6 +6,7 @@ import MemberCard from "../Cards/MemberCard";
 
 interface IExecutiveBoard {}
 
+{/* Function to Fetch Data */}
 async function getData() {
   const res = await fetch('http://127.0.0.1:8000/members');
   if (!res.ok) {
@@ -16,6 +17,7 @@ async function getData() {
 }
 
 export default async function ExecutiveBoard() {
+  {/* Fetch OTR Members Info */}
   const data = await getData()
 
   const otrMembers = data['OTR Members'];
@@ -30,9 +32,11 @@ export default async function ExecutiveBoard() {
     return null;
   });
 
+  {/* Style Page */}
+  {/* Utilizes the Member Card Component in /src/components/cards */}
   return (
     <Box display="flex" justifyContent="space-between" margin="0 -10px">
-      {memberCards.map((card, index) => (
+      {memberCards.slice(0, 3).map((card, index) => (
         <Box key={index} margin="0 100px">
           {card}
         </Box>

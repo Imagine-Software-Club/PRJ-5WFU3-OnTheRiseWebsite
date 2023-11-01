@@ -6,7 +6,12 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
-export default function EventCard() {
+interface IEventCardProps {
+  name: string;
+  date: string;
+}
+
+const EventCard: React.FC<IEventCardProps> = ({ name, date }) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
@@ -17,10 +22,10 @@ export default function EventCard() {
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          Lizard
+          {name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          adskladjfk;
+          {date}
         </Typography>
       </CardContent>
       <CardActions>
@@ -30,3 +35,5 @@ export default function EventCard() {
     </Card>
   );
 }
+
+export default EventCard;

@@ -23,10 +23,10 @@ const MemberCard: React.FC<IMemberCardProps> = ({ name, position }) => {
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
-          {name}
+          Joe Biden
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {position}
+          President
         </Typography>
       </CardContent>
     </Card>

@@ -7,7 +7,7 @@ import InstagramIcon from "../../public/instagram.svg";
 import gmailIcon from "../../public/google-gmail.svg";
 import phoneIcon from "../../public/alternate-phone-square.svg";
 import _map from "lodash/map";
-//use this is data needs to be passed into component
+
 interface IContactUs {}
 
 const acme = Acme({

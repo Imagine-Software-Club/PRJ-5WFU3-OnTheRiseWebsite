@@ -1,4 +1,9 @@
 import { Box, TextField, Button } from "@mui/material";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { render } from "@react-email/render";
+import { sendEmail } from "../../app/lib/email";
+
+
 
 const ContactUs = () => {
   return (
@@ -31,11 +36,25 @@ const ContactUs = () => {
           margin="normal"
         />
         <Button type="submit" variant="contained" color="primary">
-          Submit
+          {handler}
         </Button>
       </form>
     </Box>
   );
 };
+ 
+async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  await sendEmail({
+    to: "5wfu3.imagine@gmail.com",
+    subject: "Welcome to NextAPI",
+    html: render(ContactUs()),
+  });
+
+  return res.status(200).json({ message: "Email sent successfully" });
+}
 
 export default ContactUs;
+

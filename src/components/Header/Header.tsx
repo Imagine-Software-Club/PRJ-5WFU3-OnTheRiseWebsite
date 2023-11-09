@@ -41,9 +41,8 @@ export const Header = () => {
           background: "#131310",
           height: ["50px", "65px", "75px"],
           position: "sticky",
-          justifyContent: "space-between",
-          alignItems: "center",
           flexDirection: "row",
+          alignItems: "center",
           zIndex: "1000",
           top: "0",
         }}
@@ -51,7 +50,7 @@ export const Header = () => {
         <div
           style={{
             display: "flex",
-            alignItems: "center",
+            alignItems: "left",
           }}
         >
           <Image
@@ -134,7 +133,12 @@ export const Header = () => {
                   textDecoration: "none",
                   color: "#FFFFFF",
                   transition: "color 0.3s ease, transform 0.5s ease",
+<<<<<<< Updated upstream
                   fontFamily: "Advent Pro",
+=======
+                  fontFamily: advent_pro.style.fontFamily,
+                  weight: "200",
+>>>>>>> Stashed changes
                   fontSize: "2px",
                   ":hover": {
                     color: "#FFD700",

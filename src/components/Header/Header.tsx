@@ -6,6 +6,20 @@ import SearchIcon from "public/images/Search_Icon.png";
 import { Allison, Advent_Pro } from "next/font/google";
 import { map as _map } from "lodash";
 
+const allison = Allison({
+  weight:["400"],
+  style:["normal"],
+  subsets: ['latin', 'latin-ext', 'vietnamese'],
+  display: "swap"
+});
+
+const advent_pro = Advent_Pro({
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  style: ['normal', 'italic'],
+  subsets: ['cyrillic', 'cyrillic-ext', 'greek', 'latin', 'latin-ext'],
+  display: "swap"
+});
+
 const headerLink = [
   {
     href: "/about",
@@ -68,11 +82,11 @@ export const Header = () => {
             style={{
               color: "#FFFFFF",
               fontSize: "25px",
-              fontFamily: "Allison",
+              width: "fill",
+              fontFamily: allison.style.fontFamily,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              left: "192%",
             }}
           >
             On The Rise
@@ -134,7 +148,7 @@ export const Header = () => {
                   textDecoration: "none",
                   color: "#FFFFFF",
                   transition: "color 0.3s ease, transform 0.5s ease",
-                  fontFamily: "Advent Pro",
+                  fontFamily: advent_pro.style.fontFamily,
                   fontSize: "2px",
                   ":hover": {
                     color: "#FFD700",

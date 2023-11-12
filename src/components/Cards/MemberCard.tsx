@@ -1,36 +1,85 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { AnyCnameRecord } from 'dns';
+'use client'
+import React, { useState } from "react";
+import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 
 interface IMemberCardProps {
   name: string;
   position: string;
+  contactInfo?: string;
+  imageUrl?: string;
 }
 
-const MemberCard: React.FC<IMemberCardProps> = ({ name, position }) => {
+const MemberCard: React.FC<IMemberCardProps> = ({ name, position, contactInfo, imageUrl }) => {
+  const [isFlipped, setFlipped] = useState(false);
+
+  const handleCardFlip = () => {
+    setFlipped(!isFlipped);
+  };
+
   return (
-    <Card sx={{ maxWidth: 250 }}>
-      <CardMedia
-        component="img"
-        alt="Member Picture"
-        height="140"
-        image="https://www.google.com/imgres?imgurl=https%3A%2F%2Fcdn-icons-png.flaticon.com%2F512%2F554%2F554835.png&tbnid=0Ml8n18XNSPHYM&vet=12ahUKEwiYo9LF96CCAxVPwckDHcchD6MQMygGegQIARBk..i&imgrefurl=https%3A%2F%2Fwww.freepik.com%2Ficon%2Femployee_554835&docid=1xr2o3otLvZ0YM&w=512&h=512&q=sample%20image%20of%20person&ved=2ahUKEwiYo9LF96CCAxVPwckDHcchD6MQMygGegQIARBk"
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          {name}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {position}
-        </Typography>
-      </CardContent>
+    <Card
+      sx={{
+        maxWidth: 250,
+        perspective: "1000px",
+        position: "relative",
+        cursor: "pointer",
+        border: "1px solid black", // Add a black border
+        boxShadow: "0px 0px 4px 4px rgba(0, 0, 0, 0.2)", // Add a black shadow
+      }}
+      onClick={handleCardFlip}
+    >
+      <Box
+        sx={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          transformStyle: "preserve-3d",
+          transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
+          transition: "transform 0.6s",
+        }}
+      >
+        {/* Front Side */}
+        <CardMedia
+          component="img"
+          alt="Member Picture"
+          height="140"
+          image={imageUrl || "https://your-default-image-url-here"}
+        />
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
+            backfaceVisibility: "hidden",
+          }}
+        >
+          <Typography gutterBottom variant="h5" component="div">
+            {name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {position}
+          </Typography>
+        </CardContent>
+
+        {/* Back Side */}
+        <CardContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            height: "100%",
+            transform: "rotateY(180deg)",
+            backfaceVisibility: "hidden",
+          }}
+        >
+          {contactInfo && <Typography variant="body2">{contactInfo}</Typography>}
+        </CardContent>
+      </Box>
     </Card>
   );
-}
+};
 
 export default MemberCard;

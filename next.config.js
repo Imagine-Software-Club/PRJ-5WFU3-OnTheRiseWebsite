@@ -2,7 +2,6 @@
 const nextConfig = {
   rewrites: async () => {
     return [
-
       {
         source: "/upcoming",
         destination:
@@ -51,6 +50,13 @@ const nextConfig = {
           process.env.NODE_ENV === "development"
             ? "http://127.0.0.1:8000/openapi.json"
             : "/api/openapi.json",
+      },
+      {
+        source: "/events/:id",
+        destination:
+          process.env.NODE_ENV === "development"
+            ? "http://127.0.0.1:8000/event/:id"
+            : "/api/",
       },
     ];
   },

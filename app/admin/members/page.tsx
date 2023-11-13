@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import React from "react";
-import MemberCard from "../../src/components/Cards/MemberCard";
+import MemberRow from "../../../src/components/AdminRows/memberRow";
 
 // Function to fetch data
 async function getData() {
@@ -17,21 +17,17 @@ export default async function MembersPage() {
   const data = await getData();
   const otrMembers = data["OTR Members"];
 
-  const memberCards = otrMembers.map((member, index) => {
+  const memberRow = otrMembers.map((member, index) => {
     const name = member["Name"];
-    const role = member["Role"];
+    const position = member["Role"];
+    const major = member["Major"];
 
     if (name) {
-      return <MemberCard key={index} name={name} position={role} />;
+      return <MemberRow key={index} name={name} position={position} major={major} />;
     }
     return null;
   });
 
-  // Split the memberCards into rows of 4
-  const rows = [];
-  for (let i = 0; i < memberCards.length; i += 4) {
-    rows.push(memberCards.slice(i, i + 4));
-  }
 
   // Create rows with centered content, evenly spread across the page's width
   const containerStyles = {
@@ -42,30 +38,19 @@ export default async function MembersPage() {
   };
 
   const rowStyles = {
-    display: "flex",
-    justifyContent: "space-between", // Spread member cards evenly across the row
-    alignItems: "center",
-    marginBottom: "50px", // Add 50px margin between rows
+    marginBottom: "10px", // Add 10px margin between rows
   };
 
-  const cardStyles = {
-    margin: "0 35px", // Add 25px margin between member cards in a row
-  };
-
+  // Output the event rows
   return (
     <Box style={containerStyles}>
-      {rows.map((row, rowIndex) => (
+      {memberRow.map((row, rowIndex) => (
         <Box key={rowIndex} style={rowStyles}>
-          {row.map((card, cardIndex) => (
-            <Box key={cardIndex} style={cardStyles}>
-              {card}
-            </Box>
-          ))}
+          {row}
         </Box>
       ))}
     </Box>
   );
 }
-
 
 export const dynamic = "force-dynamic";

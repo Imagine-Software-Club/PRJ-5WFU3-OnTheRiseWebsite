@@ -103,3 +103,5 @@ export default async function EventsPage() {
   
 
 };
+
+export const dynamic = "force-dynamic";

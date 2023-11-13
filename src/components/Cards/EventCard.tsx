@@ -30,7 +30,7 @@ const EventCard: React.FC<IEventCardProps> = ({ name, date }) => {
       </CardContent>
       <CardActions>
         <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
+        <Button size="small" href = "/event/{name}">Learn More</Button>
       </CardActions>
     </Card>
   );

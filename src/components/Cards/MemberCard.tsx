@@ -43,7 +43,7 @@ const MemberCard: React.FC<IMemberCardProps> = ({ name, position, contactInfo, i
           component="img"
           alt="Member Picture"
           height="140"
-          image={imageUrl || "https://your-default-image-url-here"}
+          image={imageUrl || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9oVH_W3MWsmcO6UhuSG6SazNf0bBqk-TkDw&usqp=CAU"}
         />
         <CardContent
           sx={{

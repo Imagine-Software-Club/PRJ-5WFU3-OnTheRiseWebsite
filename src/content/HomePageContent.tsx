@@ -1,11 +1,10 @@
 import { Box, Stack, Typography } from "@mui/material";
 
-import OnTheRiseLogo from "../../public/images/OnTheRiseLogo.png";
-import Image from "next/image";
 import ExecutiveBoard from "../components/HomePage/ExecutiveBoard";
 import OurMission from "../components/HomePage/OurMission";
 import ContactUs from "../components/HomePage/ContactUs";
 import EventsHome from "../components/HomePage/EventsHome";
+import { Introduction } from "../components/HomePage/Introduction";
 
 export const HomePageContent = () => {
   return (
@@ -13,21 +12,12 @@ export const HomePageContent = () => {
       sx={{
         alignItems: "center",
         flexDirection: "column",
-        justifyContent: "center"
+        justifyContent: "center",
       }}
     >
-      <Image
-        src={OnTheRiseLogo}
-        alt=""
-        style={{
-          width: "auto",
-          height: "auto",
-          objectFit: "fill",
-        }}
-      />
+      {/* <Introduction /> */}
       <OurMission />
       <EventsHome />
-      <ExecutiveBoard />
       <ContactUs />
     </Stack>
   );

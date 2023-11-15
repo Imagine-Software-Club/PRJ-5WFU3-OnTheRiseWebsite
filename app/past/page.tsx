@@ -47,10 +47,13 @@ export default async function EventsPage() {
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
       {/* <EventsHeader /> */}
-      <EventButtons />
+      <br></br>
+        <br></br>
+          <EventButtons />
+        <br></br>
       {/* Past Events */}
       <Box display="flex" flexDirection="column" alignItems="center">
-        <Typography variant="h5" style={{ color: "white" }}>
+        <Typography variant="h5" sx={{ color: "black", my: 2 }}>
           Past Events
         </Typography>
         <Box display="flex" flexWrap="wrap" justifyContent="center">

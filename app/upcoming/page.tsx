@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import EventCard from "../../src/components/Cards/EventCard";
-import EventsHeader from "../../src/components/Header/EventsHeader";
 import EventButtons from "../../src/components/EventButtons";
 
 {
@@ -49,11 +48,15 @@ export default async function UpcomingEventsPage() {
       {/* Upcoming Events */}
       <Box>
         {/* <EventsHeader /> */}
-        <EventButtons />
+        <br></br>
+        <br></br>
+          <EventButtons />
+        <br></br>
         <center>
-          <Typography variant="h5" style={{ color: "white" }}>
-            Upcoming Events
-          </Typography>
+          <br></br>
+          <Typography variant="h5" sx={{ color: "black", my: 2 }}>
+          Upcoming Events
+        </Typography>
         </center>
         <Box display="flex" flexWrap="wrap" justifyContent="center">
           {eventCards.map((card, index) => (

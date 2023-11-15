@@ -4,7 +4,7 @@ const AboutUs = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#f0f0f0",
+        backgroundColor: "ffff00",
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
@@ -19,16 +19,17 @@ const AboutUs = () => {
           textAlign: "center",
         }}
       >
-        <Typography variant="h4" sx={{ color: "blue" }}>
-          Welcome to Our Story
+        <Typography variant="h4" sx={{ color: "black" }}>
+          Welcome To On The Rise
         </Typography>
         <Typography variant="body1" sx={{ marginTop: "15px" }}>
-          We are a team of passionate individuals dedicated to making a
-          difference. Our mission is to...
+          We are a team of passionate individuals dedicated to making a difference
+            on Michigan State Universities Campus. Our mission is to bring people together
+            and create a community of like minded individuals who want to be involved in community based activities.
           {/* Add your compelling story here */}
         </Typography>
         <Typography variant="body1" sx={{ marginTop: "15px" }}>
-          Join us on our journey and be a part of something amazing!
+          Join us on our journey and be a part of THE BEST ORG ON CAMP!
         </Typography>
       </Paper>
     </Box>

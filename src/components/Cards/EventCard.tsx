@@ -18,7 +18,7 @@ const EventCard: React.FC<IEventCardProps> = ({ name, date }) => {
         component="img"
         alt="green iguana"
         height="140"
-        image="/static/images/cards/contemplative-reptile.jpg"
+        image={"http://localhost:3000/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FOnTheRiseLogo.1ecdc1fb.png&w=1080&q=75"}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">

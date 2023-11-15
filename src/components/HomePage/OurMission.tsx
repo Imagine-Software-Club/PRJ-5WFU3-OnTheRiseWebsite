@@ -20,16 +20,52 @@ const EventCard = () => {
       direction="column"
       spacing={1}
       alignItems="center"
-      sx={{ flexGrow: 1, flexBasis: "50%" }}
+      sx={{ flexGrow: 1, flexBasis: "50%", mb: "3%" }}
     >
-      <Image src={OnTheRise} alt="Event" width={150} height={150} />{" "}
-      <Typography sx={{ fontSize: "24px", mt: 1 }}>
+      <Image
+        src={OnTheRise}
+        alt="Event"
+        style={{ width: "250px", height: "auto" }}
+      />
+      <Typography
+        sx={{ fontSize: "24px", mt: 1, fontFamily: acme.style.fontFamily }}
+      >
         Event Description
       </Typography>
     </Stack>
   );
 };
 
+const UpcomingCard = () => {
+  return (
+    <Box sx={{ background: "#DFDFDB", mb: "3%", px: 4, py: 2 }}>
+      <Typography
+        sx={{
+          fontSize: "18px",
+          fontFamily: acme.style.fontFamily,
+          textAlign: "center",
+        }}
+      >
+        Event Title
+      </Typography>
+      <Typography
+        sx={{ fontSize: "15px", fontFamily: acme.style.fontFamily, mb: "5px" }}
+      >
+        Location: Event Location
+      </Typography>
+      <Typography
+        sx={{ fontSize: "15px", fontFamily: acme.style.fontFamily, mb: "5px" }}
+      >
+        Date: Event Date
+      </Typography>
+      <Typography
+        sx={{ fontSize: "15px", fontFamily: acme.style.fontFamily, mb: "5px" }}
+      >
+        Time: Event Time
+      </Typography>
+    </Box>
+  );
+};
 const OurMission: React.FC<IOurMissionProps> = () => {
   // ... your data and useEffect if needed
 
@@ -46,7 +82,7 @@ const OurMission: React.FC<IOurMissionProps> = () => {
         Our Mission
       </Typography>
       <Stack direction="row" spacing={2}>
-        <Paper sx={{ width: "60%" }}>
+        <Paper sx={{ width: "60%", height: "fit-content" }}>
           <Box
             sx={{
               background: "#EFD80A",
@@ -72,7 +108,25 @@ const OurMission: React.FC<IOurMissionProps> = () => {
           </Stack>
         </Paper>
         <Paper sx={{ width: "40%" }}>
-          {/* Additional content for the second paper */}
+          <Box
+            sx={{
+              background: "#EFD80A",
+              p: 2,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "24px",
+              fontFamily: acme.style.fontFamily,
+            }}
+          >
+            Upcoming Events
+          </Box>
+          <Stack sx={{ p: 2 }}>
+            <UpcomingCard />
+            <UpcomingCard />
+            <UpcomingCard />
+            <UpcomingCard />
+          </Stack>
         </Paper>
       </Stack>
     </Stack>

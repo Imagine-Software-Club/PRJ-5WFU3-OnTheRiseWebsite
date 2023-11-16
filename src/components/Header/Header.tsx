@@ -1,4 +1,4 @@
-import { Link, Stack } from "@mui/material";
+import { Button, Link, Stack } from "@mui/material";
 import React from "react";
 import Image from "next/image";
 import OnTheRiseLogo from "public/images/OnTheRiseLogo.png";
@@ -10,15 +10,15 @@ const allison = Allison({
   weight: ["400"],
   style: ["normal"],
   display: "swap",
-  subsets: ['latin', 'latin-ext', 'vietnamese']
-})
+  subsets: ["latin", "latin-ext", "vietnamese"],
+});
 
 const advent_pro = Advent_Pro({
-  weight: ['100','200','300','400','500','600','700','800','900'],
-  style: ['normal', 'italic'],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
   display: "swap",
-  subsets: ['cyrillic','cyrillic-ext','greek','latin','latin-ext']
-})
+  subsets: ["cyrillic", "cyrillic-ext", "greek", "latin", "latin-ext"],
+});
 
 const headerLink = [
   {
@@ -67,16 +67,18 @@ export const Header = () => {
             alignItems: "left",
           }}
         >
-          <Image
-            src={OnTheRiseLogo}
-            alt=""
-            style={{
-              width: "73px",
-              height: "73px",
-              objectFit: "fill",
-              margin: "20px",
-            }}
-          />
+          <Button href="/">
+            <Image
+              src={OnTheRiseLogo}
+              alt=""
+              style={{
+                width: "73px",
+                height: "73px",
+                objectFit: "fill",
+                margin: "20px",
+              }}
+            />
+          </Button>
           <div
             style={{
               color: "#FFFFFF",
@@ -114,7 +116,7 @@ export const Header = () => {
             justifyContent: "center",
           }}
         >
-          {_map(headerLink, (linkInfo, index) => (
+          {_map(headerLink, (linkInfo, index) =>
             linkInfo.href === "/login" ? (
               <Link
                 key={linkInfo.href}
@@ -175,7 +177,7 @@ export const Header = () => {
                 {linkInfo.text}
               </Link>
             )
-          ))}
+          )}
           <div style={{ flex: 1 }}></div>
           <Link
             href="/search"
@@ -188,7 +190,11 @@ export const Header = () => {
               },
             }}
           >
-            <Image src={SearchIcon} alt="Search Icon" style={{ width: "30px", height: "30px" }} />
+            <Image
+              src={SearchIcon}
+              alt="Search Icon"
+              style={{ width: "30px", height: "30px" }}
+            />
           </Link>
         </Stack>
       </Stack>

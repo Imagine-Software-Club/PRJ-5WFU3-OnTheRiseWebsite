@@ -1,4 +1,4 @@
-import { Button, Link, Stack } from "@mui/material";
+import { Button, Link, Stack, Typography } from "@mui/material";
 import React from "react";
 import Image from "next/image";
 import OnTheRiseLogo from "public/images/OnTheRiseLogo.png";
@@ -79,7 +79,9 @@ export const Header = () => {
               }}
             />
           </Button>
-          <div
+          <Typography
+            component={Link}
+            href="/"
             style={{
               color: "#FFFFFF",
               fontSize: "25px",
@@ -91,7 +93,7 @@ export const Header = () => {
             }}
           >
             On The Rise
-          </div>
+          </Typography>
         </div>
       </Stack>
       <Stack

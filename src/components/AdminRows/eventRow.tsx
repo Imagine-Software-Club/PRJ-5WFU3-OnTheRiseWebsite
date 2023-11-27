@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
+import MailIcon from '@mui/icons-material/Mail';
 import ClearIcon from '@mui/icons-material/Clear';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -96,6 +97,10 @@ const EventRow: React.FC<IEventRowProps> = ({ name, date, description, type, pic
       <ListItem style={style}>
         <ListItemText primary={name} secondary={`Date: ${date}, Type: ${type}`} />
         <div style={{ display: 'flex', alignItems: 'center' }}>
+        <IconButton href = {"/admin/mail/" + name}>
+            <MailIcon />
+          </IconButton>
+
           <IconButton onClick={handleEdit}>
             <EditIcon />
           </IconButton>
@@ -111,7 +116,7 @@ const EventRow: React.FC<IEventRowProps> = ({ name, date, description, type, pic
         <form onSubmit={handleSubmitEdit}>
           {/* Add form fields for editing */}
           <TextField label="Edit Name" fullWidth margin="normal" value={editedData.name} onChange={handleChange('name')} />
-          <TextField fullWidth margin="normal" value={editedData.date} onChange={handleChange('date')} />
+          <TextField type = "Date" fullWidth margin="normal" value={editedData.date} onChange={handleChange('date')} />
           <TextField label="Edit Description" multiline rows={4} fullWidth margin="normal" value={editedData.description} onChange={handleChange('description')} />
           {/* Add other fields as needed */}
 

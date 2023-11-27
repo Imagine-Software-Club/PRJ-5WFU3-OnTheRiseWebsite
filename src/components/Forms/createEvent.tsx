@@ -64,7 +64,8 @@ const CreateEvent: React.FC<CreateEventProps> = ({ name, date, description}) => 
   return (
     <div>
       <TextField label="Event Name" fullWidth margin="normal" value={formData.name} onChange={handleChange('name')} />
-      <TextField type="string" fullWidth margin="normal" value={formData.date} onChange={handleChange('date')} />
+      <TextField type="Date" fullWidth margin="normal" value={formData.date} onChange={handleChange('date')} />
+      <TextField type="Time" fullWidth margin="normal"/>
       <TextField
         label="Description"
         multiline

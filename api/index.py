@@ -1,7 +1,12 @@
 from fastapi import FastAPI
-app = FastAPI()
+from fastapi_mail import FastMail, MessageSchema,ConnectionConfig
+from starlette.requests import Request
+from starlette.responses import JSONResponse
+from typing import List
+from pydantic import EmailStr, BaseModel
 
-from pydantic import BaseModel
+
+app = FastAPI()
 
 #Firebase
 import firebase_admin
@@ -22,29 +27,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-"""
-# Adding to Firebase DB 
-doc_ref = db.collection("events").document("Event 1")
-doc_ref.set({
-        "name": "Event 1",
-        "id": 1,
-        "date": "10/08/2023",
-        "description": "Sample...",
-        "pictures": "Picture ID",
-        "key words": "Education",
-})
-
-doc_ref = db.collection("events").document("Event 2")
-doc_ref.set({
-    "name": "Event 2",
-    "id": 2,
-    "date": "10/12/2023",
-    "description": "Sample...",
-    "pictures": "Picture ID",
-    "key words": "Education",
-})
-"""
 
 # Starting Endpoints
 @app.get("/")
@@ -113,15 +95,16 @@ async def upcomingPost(item: Event):
 
 @app.get("/event/{event_id}")
 def event(event_id: str):
-    events_ref = db.collection("events")
+    events_ref = db.collection("events").document(event_id)
 
-    # Retrieve the specific event with the given ID
-    doc_ref = events_ref.document(event_id)
-    doc = doc_ref.get()
+    # Check if the event exists
+    if not events_ref.get().exists:
+        raise HTTPException(status_code=404, detail="Event not found")
+    
+    doc = events_ref.get()
 
-    if doc.exists:
-        this_event = doc.to_dict()
-        return this_event
+
+    this_event = doc.to_dict()
    
     return {"Event": this_event}
 
@@ -183,48 +166,135 @@ def pastPost(item: Event):
     result = []
 
     doc_ref = db.collection("events").document(item.name)
+
     data_to_update = {"Date": item.date, "Description": item.description, "Key_Words": item.keyWords,
                  "Name": item.name, "Type": "Past"}
     doc_ref.update(data_to_update)
 
     return {"Past Events": result}
 
+# ---------------------
+# - Register for Events
+# ---------------------
+class Register(BaseModel):
+    email: str
+    event: str
+    first: str
+    last: str
+    phone: str
+
+@app.post("/register")
+def pastPost(item: Register):
+    # Add to events mailing list
+    doc_ref = db.collection("events").document(item.event)
+    event_data = doc_ref.get().to_dict()
+    
+    if event_data:
+        registered_emails = event_data.get("Registered", [])
+        registered_emails.append(item.email)
+
+        data_to_update = {
+            "Date": event_data.get("Date", ""),
+            "Description": event_data.get("Description", ""),
+            "Key_Words": event_data.get("Key_Words", ""),
+            "Name": event_data.get("Name", ""),
+            "Type": "Past",
+            "Registered": registered_emails
+        }
+
+        doc_ref.update(data_to_update)
+    else:
+        return {"Error": "Event not found"}
+
+    # Add to user's events
+    user_doc_ref = db.collection("Registered").document(item.email)
+    user_data = user_doc_ref.get().to_dict()
+
+    if user_data:
+        registered_events = user_data.get("Events", [])
+        registered_events.append(item.event)
+
+        user_data_to_update = {"Email": item.email, "Events": registered_events}
+        user_doc_ref.update(user_data_to_update)
+    else:
+        # Create a new document for the user if not found
+        new_user_data = {"Email": item.email, "Events": [item.event]}
+        user_doc_ref.set(new_user_data)
+
+    return {"Done": "Succeeded"}
+
+
+
+
 
 # ------------
 # - Emails
 # ------------
-# import smtplib
-# import ssl
+conf = ConnectionConfig(
+    MAIL_USERNAME="5wfu3.imagine@gmail.com",
+    MAIL_PASSWORD="vkmh fiqx emyi ipta",
+    MAIL_PORT=587,
+    MAIL_SERVER="smtp.gmail.com",
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS=False,
+    MAIL_FROM="5wfu3.imagine@gmail.com"
+)
 
-# def send_email(subject, body, sender_email, receiver_email, password):
-#     port = 465
-#     smtp_server = "smtp.gmail.com"
-#     message = f"""\
-#     Subject: {subject}
+class EmailSchema(BaseModel):
+   subject: str
+   from_email: str
+   message: str
 
-#     {body}
-#     """
+@app.post("/contact_us")
+async def send_mail(email: EmailSchema):
+    template = """
+        <html>
+        <body>
+ 
+        <p>Hi !!!</p>
+        <br>Thanks for using fastapi mail, keep using it..!!!</p>
+ 
+ 
+        </body>
+        </html>
+        """
 
-#     context = ssl.create_default_context()
-    
-#     with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
-#         try:
-#             print("Logging in...")
-#             server.login(sender_email, password)
-#             print("Sending email...")
-#             server.sendmail(sender_email, receiver_email, message)
-#             print("Email sent successfully!")
-#         except Exception as e:
-#             print(f"An error occurred: {e}")
+    message = MessageSchema(
+        subject = email.subject + " | Email from " + email.from_email,
+        recipients =["swabhankatkoori@gmail.com"],
+        body = email.message,
+        subtype= 'plain'
+    )
+ 
+    fm = FastMail(conf)
+    await fm.send_message(message)
+    print(message)
+ 
+    return JSONResponse(status_code=200, content={"message": "email has been sent"})
 
-# # Example usage:
-# subject = "Hello from Python"
-# body = "This is a test email sent from Python."
-# sender_email = "5wfu3.imagine@gmail.com"
-# receiver_email = "swabhankatkoori@gmail.com"
-# password = input("password")
 
-# send_email(subject, body, sender_email, receiver_email, password)
+class EmailSchema(BaseModel):
+   email: List[EmailStr]
+   subject: str
+   message: str
+
+@app.post("/emailList")
+async def send_mailList(email: EmailSchema):
+    template = email.message
+
+    message = MessageSchema(
+        subject = email.subject,
+        recipients =email.dict().get("email"),
+        body = email.message,
+        subtype= 'html'
+    )
+ 
+    fm = FastMail(conf)
+    await fm.send_message(message)
+    print(message)
+ 
+    return JSONResponse(status_code=200, content={"message": "email has been sent"})
+
 
 # ------------
 # - OTR Members
@@ -280,3 +350,5 @@ async def delete_member(member_name: str):
     members_ref.delete()
 
     return {"Deleted Member": member_name}
+
+

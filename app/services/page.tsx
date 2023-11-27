@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Paper, Typography, Stack } from "@mui/material";
+import { Box, Paper, Typography, Stack, Button } from "@mui/material";
 
 const ServiceCard = ({ number, title, description }) => {
   return (
@@ -52,29 +52,27 @@ const Services = () => {
 
         <ServiceCard
           number={1}
-          title="Lorem Ipsum Service"
+          title="Community Service"
           description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam justo nunc, scelerisque vel odio at, efficitur tincidunt justo."
         />
         <ServiceCard
           number={2}
-          title="Ipsum Lorem Solutions"
+          title="Leadership"
           description="Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis."
         />
         <ServiceCard
           number={3}
-          title="Consectetur Adipiscing Service"
+          title="Development"
           description="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
         />
         <ServiceCard
           number={4}
-          title="Sed Do Eiusmod Service"
+          title="Entertainment"
           description="Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
         />
-        <ServiceCard
-          number={5}
-          title="Tempor Incididunt Service"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        />
+        <Button variant="contained" color="primary" style={{ marginTop: '16px' }} href = "/contact-us">
+        Interested, Work with Us!
+        </Button>
       </Paper>
     </Stack>
   );

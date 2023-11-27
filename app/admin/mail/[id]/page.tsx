@@ -1,32 +1,34 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Box, TextField, Button, Paper, Typography } from "@mui/material";
+import { Box, Button, Paper, Typography, TextField,  } from "@mui/material";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 
 async function sendEmail(formData) {
-  try {
-    const res = await fetch('http://127.0.0.1:8000/contact_us', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (!res.ok) {
-      throw Error('Failed to post event');
+    try {
+      const res = await fetch('http://127.0.0.1:8000/emailList', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (!res.ok) {
+        throw Error('Failed to post event');
+      }
+    } catch (error) {
+      console.error(error.message);
     }
-  } catch (error) {
-    console.error(error.message);
   }
-}
 
-
-const ContactUs = () => {
+const EmailList = () => {
   const [formData, setFormData] = useState({
+    email: ["swabhankatkoori@gmail.com", "katkoor4@msu.edu"],
     subject: "",
-    from_email: "",
     message: ""
   });
 
@@ -34,19 +36,28 @@ const ContactUs = () => {
     setFormData({ ...formData, [field]: e.target.value });
   };
 
-  const handleAddEvent = () => {
-    sendEmail(formData)
-    setFormData({
-      subject: "",
-      from_email: "",
-      message: ""
-    });
+  const handleQuill = (field) => (value) => {
+    setFormData({ ...formData, [field]: value });
   };
+
+  const handleAddEvent = () => {
+    sendEmail(formData);
+
+    // Reset the form data
+    setFormData({
+        email: ["swabhankatkoori@gmail.com", "katkoor4@msu.edu"],
+        subject: "",
+        message: ""
+      });
+  };
+
+
+  
 
   return (
     <Box
       sx={{
-        backgroundColor: "#ffffff", // Set background color to white
+        backgroundColor: "#ffffff",
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
@@ -56,13 +67,13 @@ const ContactUs = () => {
       <Paper
         elevation={3}
         sx={{
-          padding: "40px", // Increased padding for a larger box
+          padding: "40px",
           maxWidth: "600px",
           textAlign: "center",
         }}
       >
         <Typography variant="h4" sx={{ color: "green", mb: 3 }}>
-          Contact Us
+          Send an email to everyone registered!
         </Typography>
         <form>
           <TextField
@@ -72,23 +83,11 @@ const ContactUs = () => {
             variant="outlined"
             onChange={handleChange('subject')}
           />
-          <TextField
-            label="Your Email"
-            type="email"
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            onChange={handleChange('from_email')}
+
+          <ReactQuill
+            onChange={(value) => handleQuill('message')(value)}
           />
-          <TextField
-            label="Your Message"
-            multiline
-            rows={4}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            onChange={handleChange('message')}
-          />
+
           <Button
             type="submit"
             variant="contained"
@@ -104,4 +103,4 @@ const ContactUs = () => {
   );
 };
 
-export default ContactUs;
+export default EmailList;

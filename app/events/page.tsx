@@ -1,11 +1,11 @@
+'use client';
+
+
+import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
-import React from "react";
 import EventCard from "../../src/components/Cards/EventCard";
 import EventButtons from "../../src/components/EventButtons";
 
-{
-  /* Fetch data for upcoming and past events */
-}
 async function getUpcoming() {
   const res = await fetch("http://127.0.0.1:8000/upcoming");
   if (!res.ok) {
@@ -24,90 +24,56 @@ async function getPast() {
   return res.json();
 }
 
-export default async function EventsPage() {
-  {
-    /* Store upcoming events */
-  }
+const EventsPage = () => {
+  const [otrUpcoming, setOtrUpcoming] = useState([]);
+  const [otrPast, setOtrPast] = useState([]);
 
-  const data = await getUpcoming();
+  useEffect(() => {
+    const fetchData = async () => {
+      const upcomingData = await getUpcoming();
+      const pastData = await getPast();
 
-  const otrUpcoming = data["Upcoming Events"];
+      setOtrUpcoming(upcomingData["Upcoming Events"]);
+      setOtrPast(pastData["Past Events"]);
+    };
 
-  const eventCards = otrUpcoming.map((event, index) => {
-    const name = event["Name"];
-    const date = event["Date"];
-    const description = event["Description"];
-    const keyWords = event["Key_Words"];
-    const type = event["Upcoming"];
+    fetchData();
+  }, []);
 
-    if (name) {
-      return <EventCard key={index} name={name} date={date} />;
-    }
-    return null;
-  });
+  const renderEventCards = (events) => {
+    return events.map((event, index) => (
+      <Box key={index} margin="0 10px 20px 0" width="250px">
+        <EventCard
+          name={event["Name"]}
+          date={event["Date"]}
+          description={event["Description"]}
+          keyWords={event["Key_Words"]}
+          type={event["Upcoming"] || event["Type"]}
+        />
+      </Box>
+    ));
+  };
 
-  {
-    /* Store past events */
-  }
-  const dataPast = await getPast();
-
-  const otrPast = dataPast["Past Events"];
-
-  const eventCardsPast = otrPast.map((event, index) => {
-    const name = event["Name"];
-    const date = event["Date"];
-    const description = event["Description"];
-    const keyWords = event["Key_Words"];
-    const type = event["Type"];
-
-    if (name) {
-      return <EventCard key={index} name={name} date={date} />;
-    }
-    return null;
-  });
-
-  {
-    /* Style Page */
-  }
-  {
-    /* Utilizes the Event Card Component in /src/components/cards */
-  }
   return (
-    <Box display="flex" flexDirection="column" alignItems="center">
-      {/* Upcoming Events */}
-      <br></br>
-        <br></br>
-          <EventButtons />
-        <br></br>
-        <center>
-        <Typography variant="h5" sx={{ color: "black", my: 2 }}>
-          Upcoming Events
-        </Typography>
-        </center>
-      <Box>
-        {/* <EventsHeader /> */}
-        <Box display="flex" flexWrap="wrap" justifyContent="center">
-          {eventCards.map((card, index) => (
-            <Box key={index} margin="0 10px 20px 10px" width="250px">
-              {card}
-            </Box>
-          ))}
-        </Box>
+    <Box display="flex" flexDirection="column" alignItems="flex-start"> {/* Updated alignment to flex-start */}
+      <EventButtons />
+      <Typography variant="h5" sx={{ color: "black", my: 2 }}>
+        Upcoming Events
+      </Typography>
+      <Box display="flex" flexWrap="wrap" justifyContent="flex-start"> {/* Updated alignment to flex-start */}
+        {renderEventCards(otrUpcoming)}
       </Box>
 
-      {/* Past Events */}
-      <Box display="flex" flexDirection="column" alignItems="center">
-      <Typography variant="h5" sx={{ color: "black", my: 2 }}>
+      <Box display="flex" flexDirection="column" alignItems="flex-start"> {/* Updated alignment to flex-start */}
+        <Typography variant="h5" sx={{ color: "black", my: 2 }}>
           Past Events
         </Typography>
-        <Box display="flex" flexWrap="wrap" justifyContent="center">
-          {eventCardsPast.map((card, index) => (
-            <Box key={index} margin="0 10px 20px 10px" width="250px">
-              {card}
-            </Box>
-          ))}
+        <Box display="flex" flexWrap="wrap" justifyContent="flex-start"> {/* Updated alignment to flex-start */}
+          {renderEventCards(otrPast)}
         </Box>
       </Box>
     </Box>
   );
-}
+};
+
+export default EventsPage;

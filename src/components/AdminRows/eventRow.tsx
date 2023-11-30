@@ -36,7 +36,6 @@ async function editEvent(name, formData) {
       body: JSON.stringify(formData),
     });
 
-
     if (!res.ok) {
       throw Error('Failed to edit event');
     }
@@ -49,7 +48,16 @@ async function editEvent(name, formData) {
 const style = {
   display: 'flex',
   justifyContent: 'space-between',
+  alignItems: 'center',
   padding: '16px',
+  width: '100%',
+  height: '80px', // Set a fixed height for each row
+  backgroundColor: '#f5f5f5', // Light gray background color
+};
+
+const formStyle = {
+  padding: '16px',
+  backgroundColor: '#ffffff', // White background color
   width: '100%',
 };
 
@@ -94,10 +102,10 @@ const EventRow: React.FC<IEventRowProps> = ({ name, date, description, type, pic
 
   return (
     <>
-      <ListItem style={style}>
+      <ListItem sx={style}>
         <ListItemText primary={name} secondary={`Date: ${date}, Type: ${type}`} />
         <div style={{ display: 'flex', alignItems: 'center' }}>
-        <IconButton href = {"/admin/mail/" + name}>
+          <IconButton href={"/admin/mail/" + name}>
             <MailIcon />
           </IconButton>
 
@@ -113,10 +121,10 @@ const EventRow: React.FC<IEventRowProps> = ({ name, date, description, type, pic
       <Divider />
 
       {isEditing && (
-        <form onSubmit={handleSubmitEdit}>
+        <form onSubmit={handleSubmitEdit} sx={formStyle}>
           {/* Add form fields for editing */}
           <TextField label="Edit Name" fullWidth margin="normal" value={editedData.name} onChange={handleChange('name')} />
-          <TextField type = "Date" fullWidth margin="normal" value={editedData.date} onChange={handleChange('date')} />
+          <TextField type="Date" fullWidth margin="normal" value={editedData.date} onChange={handleChange('date')} />
           <TextField label="Edit Description" multiline rows={4} fullWidth margin="normal" value={editedData.description} onChange={handleChange('description')} />
           {/* Add other fields as needed */}
 

@@ -1,12 +1,9 @@
-import { Box, Typography } from "@mui/material";
-import React from "react";
-import EventCard from "../../src/components/Cards/EventCard";
-import EventsHeader from "../../src/components/Header/EventsHeader";
-import EventButtons from "../../src/components/EventButtons";
+'use client';
 
-{
-  /* Fetch data for upcoming and past events */
-}
+import React, { useEffect, useState } from "react";
+import { Box, Typography } from "@mui/material";
+import EventCard from "../../src/components/Cards/EventCard";
+import EventButtons from "../../src/components/EventButtons";
 
 async function getPast() {
   const res = await fetch("http://127.0.0.1:8000/past");
@@ -17,53 +14,47 @@ async function getPast() {
   return res.json();
 }
 
-export default async function EventsPage() {
-  {
-    /* Store past events */
-  }
-  const dataPast = await getPast();
+const EventsPage = () => {
+  const [otrUpcoming, setOtrUpcoming] = useState([]);
+  const [otrPast, setOtrPast] = useState([]);
 
-  const otrPast = dataPast["Past Events"];
+  useEffect(() => {
+    const fetchData = async () => { 
+      const pastData = await getPast();
+      setOtrPast(pastData["Past Events"]);
+    };
 
-  const eventCardsPast = otrPast.map((event, index) => {
-    const name = event["Name"];
-    const date = event["Date"];
-    const description = event["Description"];
-    const keyWords = event["Key_Words"];
-    const type = event["Type"];
+    fetchData();
+  }, []);
 
-    if (name) {
-      return <EventCard key={index} name={name} date={date} />;
-    }
-    return null;
-  });
+  const renderEventCards = (events) => {
+    return events.map((event, index) => (
+      <Box key={index} margin="0 10px 20px 0" width="250px">
+        <EventCard
+          name={event["Name"]}
+          date={event["Date"]}
+          description={event["Description"]}
+          keyWords={event["Key_Words"]}
+          type={event["Upcoming"] || event["Type"]}
+        />
+      </Box>
+    ));
+  };
 
-  {
-    /* Style Page */
-  }
-  {
-    /* Utilizes the Event Card Component in /src/components/cards */
-  }
   return (
-    <Box display="flex" flexDirection="column" alignItems="center">
-      {/* <EventsHeader /> */}
-      <br></br>
-        <br></br>
-          <EventButtons />
-        <br></br>
-      {/* Past Events */}
-      <Box display="flex" flexDirection="column" alignItems="center">
+    <Box display="flex" flexDirection="column" alignItems="flex-start"> {/* Updated alignment to flex-start */}
+      <EventButtons />
+
+      <Box display="flex" flexDirection="column" alignItems="flex-start"> {/* Updated alignment to flex-start */}
         <Typography variant="h5" sx={{ color: "black", my: 2 }}>
           Past Events
         </Typography>
-        <Box display="flex" flexWrap="wrap" justifyContent="center">
-          {eventCardsPast.map((card, index) => (
-            <Box key={index} margin="0 10px 20px 10px" width="250px">
-              {card}
-            </Box>
-          ))}
+        <Box display="flex" flexWrap="wrap" justifyContent="flex-start"> {/* Updated alignment to flex-start */}
+          {renderEventCards(otrPast)}
         </Box>
       </Box>
     </Box>
   );
-}
+};
+
+export default EventsPage;

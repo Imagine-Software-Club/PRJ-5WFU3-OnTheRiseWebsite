@@ -6,6 +6,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 
+
 async function sendEmail(formData) {
     try {
       const res = await fetch('http://127.0.0.1:8000/emailList', {
@@ -24,13 +25,16 @@ async function sendEmail(formData) {
       console.error(error.message);
     }
   }
+  
 
 const EmailList = () => {
   const [formData, setFormData] = useState({
     email: ["swabhankatkoori@gmail.com", "katkoor4@msu.edu"],
     subject: "",
-    message: ""
+    message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [field]: e.target.value });
@@ -40,19 +44,26 @@ const EmailList = () => {
     setFormData({ ...formData, [field]: value });
   };
 
-  const handleAddEvent = () => {
-    sendEmail(formData);
+  const handleAddEvent = async () => {
+    if (isSubmitting) {
+      return;
+    }
 
-    // Reset the form data
-    setFormData({
+    try {
+      setIsSubmitting(true);
+      await sendEmail(formData);
+      setShowConfirmation(true);
+
+      // Reset the form data
+      setFormData({
         email: ["swabhankatkoori@gmail.com", "katkoor4@msu.edu"],
         subject: "",
-        message: ""
+        message: "",
       });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-
-
-  
 
   return (
     <Box
@@ -75,29 +86,36 @@ const EmailList = () => {
         <Typography variant="h4" sx={{ color: "green", mb: 3 }}>
           Send an email to everyone registered!
         </Typography>
-        <form>
-          <TextField
-            label="Subject"
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            onChange={handleChange('subject')}
-          />
-
-          <ReactQuill
-            onChange={(value) => handleQuill('message')(value)}
-          />
-
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{ mt: 2 }}
-            onClick={handleAddEvent}
-          >
-            Submit
-          </Button>
-        </form>
+        {showConfirmation ? (
+          <Typography variant="h6" sx={{ color: "success.main", mb: 3 }}>
+            Email sent successfully!
+          </Typography>
+        ) : (
+          <form>
+            <TextField
+              label="Subject"
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              onChange={handleChange('subject')}
+              value={formData.subject}
+            />
+            <ReactQuill
+              onChange={(value) => handleQuill('message')(value)}
+              style={{ height: '300px' }}
+            />
+            <Button
+              type="button"
+              variant="contained"
+              color="primary"
+              sx={{ mt: 2 }}
+              onClick={handleAddEvent}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Sending...' : 'Submit'}
+            </Button>
+          </form>
+        )}
       </Paper>
     </Box>
   );

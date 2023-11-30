@@ -27,26 +27,40 @@ const ContactUs = () => {
   const [formData, setFormData] = useState({
     subject: "",
     from_email: "",
-    message: ""
+    message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [field]: e.target.value });
   };
 
-  const handleAddEvent = () => {
-    sendEmail(formData)
-    setFormData({
-      subject: "",
-      from_email: "",
-      message: ""
-    });
+  const handleAddEvent = async () => {
+    if (isSubmitting) {
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      await sendEmail(formData);
+      setShowConfirmation(true);
+
+      // Reset the form after submission
+      setFormData({
+        subject: "",
+        from_email: "",
+        message: "",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <Box
       sx={{
-        backgroundColor: "#ffffff", // Set background color to white
+        backgroundColor: "#ffffff",
         minHeight: "100vh",
         display: "flex",
         justifyContent: "center",
@@ -56,7 +70,7 @@ const ContactUs = () => {
       <Paper
         elevation={3}
         sx={{
-          padding: "40px", // Increased padding for a larger box
+          padding: "40px",
           maxWidth: "600px",
           textAlign: "center",
         }}
@@ -64,41 +78,51 @@ const ContactUs = () => {
         <Typography variant="h4" sx={{ color: "green", mb: 3 }}>
           Contact Us
         </Typography>
-        <form>
-          <TextField
-            label="Subject"
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            onChange={handleChange('subject')}
-          />
-          <TextField
-            label="Your Email"
-            type="email"
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            onChange={handleChange('from_email')}
-          />
-          <TextField
-            label="Your Message"
-            multiline
-            rows={4}
-            fullWidth
-            margin="normal"
-            variant="outlined"
-            onChange={handleChange('message')}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{ mt: 2 }}
-            onClick={handleAddEvent}
-          >
-            Submit
-          </Button>
-        </form>
+        {showConfirmation ? (
+          <Typography variant="h6" sx={{ color: "success.main", mb: 3 }}>
+            Your message has been sent successfully!
+          </Typography>
+        ) : (
+          <form>
+            <TextField
+              label="Subject"
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              onChange={handleChange('subject')}
+              value={formData.subject}
+            />
+            <TextField
+              label="Your Email"
+              type="email"
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              onChange={handleChange('from_email')}
+              value={formData.from_email}
+            />
+            <TextField
+              label="Your Message"
+              multiline
+              rows={4}
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              onChange={handleChange('message')}
+              value={formData.message}
+            />
+            <Button
+              type="button"
+              variant="contained"
+              color="primary"
+              sx={{ mt: 2 }}
+              onClick={handleAddEvent}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit'}
+            </Button>
+          </form>
+        )}
       </Paper>
     </Box>
   );

@@ -1,5 +1,6 @@
+// ... (previous imports)
 'use client'
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";
 
 interface IMemberCardProps {
@@ -15,6 +16,19 @@ const MemberCard: React.FC<IMemberCardProps> = ({ name, position, contactInfo, i
   const handleCardFlip = () => {
     setFlipped(!isFlipped);
   };
+
+  useEffect(() => {
+    // Trigger initial flip when the component mounts
+    setFlipped(true);
+
+    // Reset flip state after a delay (adjust the delay as needed)
+    const resetFlip = setTimeout(() => {
+      setFlipped(false);
+    }, 1000);
+
+    // Cleanup the timeout to avoid memory leaks
+    return () => clearTimeout(resetFlip);
+  }, []); // Empty dependency array ensures this effect runs only once
 
   return (
     <Card
@@ -64,19 +78,21 @@ const MemberCard: React.FC<IMemberCardProps> = ({ name, position, contactInfo, i
         </CardContent>
 
         {/* Back Side */}
-        <CardContent
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100%",
-            transform: "rotateY(180deg)",
-            backfaceVisibility: "hidden",
-          }}
-        >
-          {contactInfo && <Typography variant="body2">{contactInfo}</Typography>}
-        </CardContent>
+        {contactInfo && (
+          <CardContent
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "100%",
+              transform: "rotateY(180deg)",
+              backfaceVisibility: "hidden",
+            }}
+          >
+            <Typography variant="body2">{contactInfo}</Typography>
+          </CardContent>
+        )}
       </Box>
     </Card>
   );

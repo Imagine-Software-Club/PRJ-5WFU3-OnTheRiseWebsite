@@ -1,5 +1,11 @@
-import { Box } from "@mui/material";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
-export default function Home() {
-  return <Box sx={{ color: "red" }}>Log In Page</Box>;
-}
+const auth = getAuth();
+signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    const user = userCredential.user;
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });

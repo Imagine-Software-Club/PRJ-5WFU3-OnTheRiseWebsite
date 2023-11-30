@@ -76,6 +76,10 @@ const CreateEvent: React.FC<CreateEventProps> = ({ name, date, description}) => 
         onChange={handleChange('description')}
       />
       <TextField label="Type" fullWidth margin="normal" value={formData.type} onChange={handleChange('type')} />
+      
+      <TextField type="text" fullWidth margin="normal" value={formData.date} onChange={handleChange('date')} />
+      <TextField type="text" fullWidth margin="normal" value={formData.date} onChange={handleChange('date')} />
+      
       <Button variant="contained" color="primary" style={{ marginTop: '16px' }} onClick={handleAddEvent}>
         Add Event
       </Button>

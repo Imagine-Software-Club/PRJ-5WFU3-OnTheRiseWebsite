@@ -20,9 +20,10 @@ export default async function MembersPage() {
   const memberCards = otrMembers.map((member, index) => {
     const name = member["Name"];
     const role = member["Role"];
+    const image = member["Image"]
 
     if (name) {
-      return <MemberCard key={index} name={name} position={role} />;
+      return <MemberCard key={index} name={name} position={role} imageUrl={image}/>;
     }
     return null;
   });

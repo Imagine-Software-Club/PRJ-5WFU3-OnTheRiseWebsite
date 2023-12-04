@@ -9,16 +9,17 @@ import Typography from '@mui/material/Typography';
 interface IEventCardProps {
   name: string;
   date: string;
+  imageUrl?: string;
 }
 
-const EventCard: React.FC<IEventCardProps> = ({ name, date }) => {
+const EventCard: React.FC<IEventCardProps> = ({ name, date, imageUrl }) => {
   return (
     <Card sx={{ maxWidth: 345, height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#f8f8f8', border: '2px solid #ff9800', borderRadius: '8px' }}>
       <CardMedia
         component="img"
         alt="Event Image"
         height="140"
-        image="http://localhost:3000/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FOnTheRiseLogo.1ecdc1fb.png&w=1080&q=75"
+        image= {imageUrl || "http://localhost:3000/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FOnTheRiseLogo.1ecdc1fb.png&w=1080&q=75"}
         style={{ objectFit: 'cover', borderRadius: '6px 6px 0 0' }}
       />
       <CardContent sx={{ flexGrow: 1 }}>

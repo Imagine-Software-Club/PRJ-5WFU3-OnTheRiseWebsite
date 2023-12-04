@@ -3,6 +3,7 @@ import { Box } from "@mui/material";
 import React from "react";
 import EventRow from "../../../src/components/AdminRows/eventRow";
 import CreateEvent from "@/src/components/Forms/createEvent";  // Correct import statement
+import { timeEnd } from "console";
 
 // Function to fetch data
 async function getData() {
@@ -23,12 +24,11 @@ export default async function MembersPage() {
     const name = event["Name"];
     const date = event["Date"];
     const description = event["Description"];
-    const type = event["Type"];
-    const pictures = event["Pictures"];
-    const keyWords= event["Key_Words"];
+    const thumbnail = event["Thumbnail"];
+    const time = event["Time"];
 
     if (name) {
-      return <EventRow key={index} name={name} date={date} description={description} type={type} pictures = "" keyWords = ""/>;
+      return <EventRow key={index} name={name} date={date} description={description} thumbnail={thumbnail} time = {time}/>;
     }
     return null;
   });
@@ -48,7 +48,7 @@ export default async function MembersPage() {
   // Output the event rows
   return (
     <Box style={containerStyles}>
-      <CreateEvent name = "" description = "" date = "" type = ""/> 
+      <CreateEvent name = "" description = "" date = "" time = "" thumbnail = ""/> 
       {eventRow.map((row, rowIndex) => (
         <Box key={rowIndex} style={rowStyles}>
           {row}

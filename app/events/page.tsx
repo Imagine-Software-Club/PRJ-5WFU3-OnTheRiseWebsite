@@ -1,6 +1,5 @@
 'use client';
 
-
 import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import EventCard from "../../src/components/Cards/EventCard";
@@ -46,9 +45,7 @@ const EventsPage = () => {
         <EventCard
           name={event["Name"]}
           date={event["Date"]}
-          description={event["Description"]}
-          keyWords={event["Key_Words"]}
-          type={event["Upcoming"] || event["Type"]}
+          imageUrl={event["Thumbnail"]}
         />
       </Box>
     ));

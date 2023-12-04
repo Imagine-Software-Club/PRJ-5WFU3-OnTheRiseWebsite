@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 
 async function postEvent(formData) {
     try {
@@ -29,25 +32,26 @@ async function postEvent(formData) {
     name: string;
     date: string;
     description: string;
-    pictures: string;
-    keyWords: string;
-    type: string;
+    thumbnail: string;
   }
   
 
-const CreateEvent: React.FC<CreateEventProps> = ({ name, date, description}) => {
+const CreateEvent: React.FC<CreateEventProps> = ({ name, date, description, thumbnail}) => {
   const [formData, setFormData] = useState({
     name: name,
     date: date,
     description: description,
-    type: "Upcoming",
-    pictures: "",
-    keyWords: "",
+    thumbnail: thumbnail
   });
 
   const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [field]: e.target.value });
   };
+
+    const handleQuill = (field) => (value) => {
+    setFormData({ ...formData, [field]: value });
+  };
+
 
   const handleAddEvent = () => {
     postEvent(formData)
@@ -55,9 +59,7 @@ const CreateEvent: React.FC<CreateEventProps> = ({ name, date, description}) => 
       name: "",
       date: "",
       description: "",
-      pictures: "",
-      keyWords: "",
-      type: "Upcoming"
+      thumbnail: ""
     });
   };
 
@@ -66,19 +68,18 @@ const CreateEvent: React.FC<CreateEventProps> = ({ name, date, description}) => 
       <TextField label="Event Name" fullWidth margin="normal" value={formData.name} onChange={handleChange('name')} />
       <TextField type="Date" fullWidth margin="normal" value={formData.date} onChange={handleChange('date')} />
       <TextField type="Time" fullWidth margin="normal"/>
-      <TextField
-        label="Description"
-        multiline
-        rows={4}
-        fullWidth
-        margin="normal"
-        value={formData.description}
-        onChange={handleChange('description')}
-      />
-      <TextField label="Type" fullWidth margin="normal" value={formData.type} onChange={handleChange('type')} />
+     
+      <ReactQuill
+            label="Description"
+            multiline
+            rows={4}
+            fullWidth
+            margin="normal"
+            value={formData.description}
+            onChange={(value) => handleQuill('description')(value)}
+        />
+      <TextField label="Image Link" fullWidth margin="normal" value={formData.thumbnail} onChange={handleChange('thumbnail')} />
       
-      <TextField type="text" fullWidth margin="normal" value={formData.date} onChange={handleChange('date')} />
-      <TextField type="text" fullWidth margin="normal" value={formData.date} onChange={handleChange('date')} />
       
       <Button variant="contained" color="primary" style={{ marginTop: '16px' }} onClick={handleAddEvent}>
         Add Event

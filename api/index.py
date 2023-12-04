@@ -80,16 +80,14 @@ class Event(BaseModel):
     name: str
     date: str
     description: str
-    pictures: str
-    keyWords: str
-    type: str
+    thumbnail: str
 
 
 @app.post("/event/post")
 async def upcomingPost(item: Event):
     doc_ref = db.collection("events").document(item.name)
-    doc_ref.set({"Date": item.date, "Description": item.description, "Key_Words": item.keyWords,
-                 "Name": item.name, "Type": "Upcoming"})
+    doc_ref.set({"Date": item.date, "Description": item.description,
+                 "Name": item.name, "Thumbnail": item.thumbnail})
 
     return {"Upcoming": doc_ref}
 
@@ -110,7 +108,6 @@ def event(event_id: str):
 
 @app.put("/event/update/{event_id}")
 async def update_event(event_id: str, updated_event: Event):
-    print(event_id)
     events_ref = db.collection("events").document(event_id)
 
     # Check if the event exists
@@ -121,7 +118,7 @@ async def update_event(event_id: str, updated_event: Event):
     events_ref.update({
         "Date": updated_event.date,
         "Description": updated_event.description,
-        "Key_Words": updated_event.keyWords,
+        "Thumbnail": updated_event.thumbnail,
         "Name": updated_event.name,
     })
 

@@ -37,9 +37,7 @@ const EventsPage = () => {
         <EventCard
           name={event["Name"]}
           date={event["Date"]}
-          description={event["Description"]}
-          keyWords={event["Key_Words"]}
-          type={event["Upcoming"] || event["Type"]}
+          imageUrl={event["Thumbnail"]}
         />
       </Box>
     ));

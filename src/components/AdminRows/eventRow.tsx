@@ -9,6 +9,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 async function deleteEvent(eventName) {
   try {
@@ -26,6 +28,7 @@ async function deleteEvent(eventName) {
 }
 
 async function editEvent(name, formData) {
+  console.log(formData)
   try {
     const res = await fetch('http://127.0.0.1:8000/event/update/' + name, {
       method: 'PUT',
@@ -65,20 +68,16 @@ interface IEventRowProps {
   name: string;
   date: string;
   description: string;
-  type: string;
-  pictures: string;
-  keyWords: string;
+  thumbnail: string;
 }
 
-const EventRow: React.FC<IEventRowProps> = ({ name, date, description, type, pictures, keyWords }) => {
+const EventRow: React.FC<IEventRowProps> = ({ name, date, description, thumbnail}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState({
     name: name,
     date: date,
     description: description,
-    type: type,
-    pictures: "",
-    keyWords: ""
+    thumbnail: thumbnail
   });
 
   const handleDelete = async () => {
@@ -86,7 +85,7 @@ const EventRow: React.FC<IEventRowProps> = ({ name, date, description, type, pic
   };
 
   const handleEdit = () => {
-    setEditedData({ name, date, description, type, pictures, keyWords });
+    setEditedData({ name, date, description, thumbnail });
     setIsEditing(!isEditing);
   };
 
@@ -96,6 +95,10 @@ const EventRow: React.FC<IEventRowProps> = ({ name, date, description, type, pic
     editEvent(name, editedData);
   };
 
+  const handleQuill = (field) => (value) => {
+    setEditedData({ ...editedData, [field]: value });
+  };
+
   const handleChange = (field) => (e) => {
     setEditedData({ ...editedData, [field]: e.target.value });
   };
@@ -103,7 +106,7 @@ const EventRow: React.FC<IEventRowProps> = ({ name, date, description, type, pic
   return (
     <>
       <ListItem sx={style}>
-        <ListItemText primary={name} secondary={`Date: ${date}, Type: ${type}`} />
+        <ListItemText primary={name} secondary={`Date: ${date}`} />
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <IconButton href={"/admin/mail/" + name}>
             <MailIcon />
@@ -125,8 +128,18 @@ const EventRow: React.FC<IEventRowProps> = ({ name, date, description, type, pic
           {/* Add form fields for editing */}
           <TextField label="Edit Name" fullWidth margin="normal" value={editedData.name} onChange={handleChange('name')} />
           <TextField type="Date" fullWidth margin="normal" value={editedData.date} onChange={handleChange('date')} />
-          <TextField label="Edit Description" multiline rows={4} fullWidth margin="normal" value={editedData.description} onChange={handleChange('description')} />
-          {/* Add other fields as needed */}
+         
+          <ReactQuill
+            label="Edit Description"
+            multiline
+            rows={4}
+            fullWidth
+            margin="normal"
+            value={editedData.description}
+            onChange={(value) => handleQuill('description')(value)}
+        />
+
+        <TextField fullWidth margin="normal" value={editedData.thumbnail} onChange={handleChange('thumbnail')} />
 
           <Button type="submit" variant="contained" color="primary" style={{ marginTop: '16px' }}>
             Save Changes

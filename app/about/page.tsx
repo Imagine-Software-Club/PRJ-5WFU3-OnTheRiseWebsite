@@ -1,42 +1,19 @@
 'use client'
 import { Box, Typography, Paper } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import Confetti from "react-confetti";
 
 const AboutUs = () => {
+  const [showConfetti, setShowConfetti] = useState(true);
+
   useEffect(() => {
-    // Check if we are on the client side before running client-specific code
-    if (typeof window !== "undefined") {
-      const container = document.getElementById("confetti-container");
+    // Cleanup function to remove confetti after 4 seconds
+    const confettiCleanupTimeout = setTimeout(() => {
+      setShowConfetti(false);
+    }, 10000);
 
-      const generateRandomColor = () => {
-        return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-      };
-
-      // Generate confetti elements
-      for (let i = 0; i < 200; i++) {
-        const confetti = document.createElement("div");
-        confetti.className = "confetti";
-        container.appendChild(confetti);
-
-        // Set random position for each confetti element
-        const startPositionX = Math.random() * window.innerWidth;
-        const startPositionY = Math.random() * window.innerHeight;
-        confetti.style.left = `${startPositionX}px`;
-        confetti.style.top = `${startPositionY}px`;
-
-        // Set random color for each confetti element
-        confetti.style.backgroundColor = generateRandomColor();
-      }
-
-      // Cleanup function to remove confetti after animation
-      setTimeout(() => {
-        const confettiElements = document.getElementsByClassName("confetti");
-        while (confettiElements.length > 0) {
-          confettiElements[0].parentNode.removeChild(confettiElements[0]);
-        }
-      }, 5000); // Adjust the duration to match the animation duration
-    }
-  }, []); // Empty dependency array ensures this runs only once on the client side
+    return () => clearTimeout(confettiCleanupTimeout);
+  }, []);
 
   return (
     <Box
@@ -59,24 +36,17 @@ const AboutUs = () => {
           pointer-events: none;
           overflow: hidden;
         }
-
-        .confetti {
-          width: 10px;
-          height: 10px;
-          background-color: #${Math.floor(Math.random() * 16777215).toString(16)}; /* Random color */
-          position: absolute;
-          animation: fall 5s linear; /* Adjust the duration as needed */
-        }
-
-        @keyframes fall {
-          0% {
-            transform: translateY(0) rotate(0deg);
-          }
-          100% {
-            transform: translateY(100vh) rotate(360deg);
-          }
-        }
       `}</style>
+
+      {showConfetti && (
+        <Confetti
+          width={window.innerWidth}
+          height={window.innerHeight}
+          numberOfPieces={200}
+          style={{ display: "block", zIndex: 1 }}
+        />
+      )}
+
       <Paper
         elevation={3}
         sx={{
@@ -84,6 +54,7 @@ const AboutUs = () => {
           maxWidth: "600px",
           textAlign: "center",
           position: "relative",
+          zIndex: 2,
         }}
       >
         <Typography variant="h4" sx={{ color: "black" }}>
@@ -97,6 +68,7 @@ const AboutUs = () => {
           Join us on our journey and be a part of THE BEST ORG ON CAMP!
         </Typography>
       </Paper>
+
       <div id="confetti-container" className="confetti-container"></div>
     </Box>
   );

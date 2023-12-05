@@ -25,9 +25,8 @@ async function sendEmail(formData) {
       console.error(error.message);
     }
   }
-  
 
-const EmailList = () => {
+  const EmailList = () => {
   const [formData, setFormData] = useState({
     email: ["swabhankatkoori@gmail.com", "katkoor4@msu.edu"],
     subject: "",

@@ -67,14 +67,16 @@ def upcomingEvents():
     for doc in docs:
         if doc.exists:
             this_event = doc.to_dict()
-            event_date = datetime.datetime.strptime(this_event.get("Date"), "%Y-%m-%d")
-            current_date = datetime.datetime.now()
+            event_date = datetime.strptime(this_event.get("Date"), "%Y-%m-%d")
+            current_date = datetime.now()
             event_type = "Upcoming" if event_date > current_date else "Past"
 
             if event_type == "Upcoming":
                 result.append(this_event)
         else:
             print("Document does not exist!")
+
+    result = sorted(result, key=lambda x: datetime.strptime(x.get("Date"), "%Y-%m-%d"), reverse = True)
     
     return {"Upcoming Events": result}
 
@@ -155,29 +157,19 @@ def pastEvents():
     for doc in docs:
         if doc.exists:
             this_event = doc.to_dict()
-            event_date = datetime.datetime.strptime(this_event.get("Date"), "%Y-%m-%d")
-            current_date = datetime.datetime.now()
+            event_date = datetime.strptime(this_event.get("Date"), "%Y-%m-%d")
+            current_date = datetime.now()
             event_type = "Upcoming" if event_date > current_date else "Past"
 
             if event_type == "Past":
                 result.append(this_event)
         else:
             print("Document does not exist!")
+
+    result = sorted(result, key=lambda x: datetime.strptime(x.get("Date"), "%Y-%m-%d"), reverse = True)
     
     return {"Past Events": result}
 
-
-@app.post("/past")
-def pastPost(item: Event):
-    result = []
-
-    doc_ref = db.collection("events").document(item.name)
-
-    data_to_update = {"Date": item.date, "Description": item.description, "Key_Words": item.keyWords,
-                 "Name": item.name, "Type": "Past"}
-    doc_ref.update(data_to_update)
-
-    return {"Past Events": result}
 
 # ---------------------
 # - Register for Events

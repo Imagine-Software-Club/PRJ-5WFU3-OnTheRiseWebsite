@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi_mail import FastMail, MessageSchema,ConnectionConfig
 from starlette.requests import Request
 from starlette.responses import JSONResponse
+from datetime import datetime
 from typing import List
 from pydantic import EmailStr, BaseModel
 
@@ -66,7 +67,11 @@ def upcomingEvents():
     for doc in docs:
         if doc.exists:
             this_event = doc.to_dict()
-            if this_event["Type"] == "Upcoming":
+            event_date = datetime.datetime.strptime(this_event.get("Date"), "%Y-%m-%d")
+            current_date = datetime.datetime.now()
+            event_type = "Upcoming" if event_date > current_date else "Past"
+
+            if event_type == "Upcoming":
                 result.append(this_event)
         else:
             print("Document does not exist!")
@@ -150,7 +155,11 @@ def pastEvents():
     for doc in docs:
         if doc.exists:
             this_event = doc.to_dict()
-            if this_event["Type"] == "Past":
+            event_date = datetime.datetime.strptime(this_event.get("Date"), "%Y-%m-%d")
+            current_date = datetime.datetime.now()
+            event_type = "Upcoming" if event_date > current_date else "Past"
+
+            if event_type == "Past":
                 result.append(this_event)
         else:
             print("Document does not exist!")

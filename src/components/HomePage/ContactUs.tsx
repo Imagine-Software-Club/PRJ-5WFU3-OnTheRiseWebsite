@@ -64,7 +64,7 @@ export const ContactUs: React.FC<IContactUs> = () => {
             />
             <Typography
               sx={{
-                fontSize: "30px",
+                fontSize: ["25px", "30px"],
                 ml: "2%",
                 fontFamily: acme.style.fontFamily,
               }}

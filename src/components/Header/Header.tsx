@@ -116,6 +116,7 @@ export const Header = () => {
             fontWeight: "normal",
             textAlign: "center",
             justifyContent: "center",
+            display: ["none", "flex"],
           }}
         >
           {_map(headerLink, (linkInfo, index) =>

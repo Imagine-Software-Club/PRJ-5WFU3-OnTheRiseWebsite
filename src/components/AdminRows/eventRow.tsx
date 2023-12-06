@@ -1,20 +1,20 @@
 "use client";
-import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import MailIcon from '@mui/icons-material/Mail';
-import ClearIcon from '@mui/icons-material/Clear';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import React, { useState } from "react";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import MailIcon from "@mui/icons-material/Mail";
+import ClearIcon from "@mui/icons-material/Clear";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Divider from "@mui/material/Divider";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 async function deleteEvent(eventName) {
   try {
-    const res = await fetch('http://127.0.0.1:8000/event/delete/' + eventName, {
+    const res = await fetch("http://127.0.0.1:8000/event/delete/" + eventName, {
       method: "DELETE",
     });
 
@@ -28,19 +28,19 @@ async function deleteEvent(eventName) {
 }
 
 async function editEvent(name, formData) {
-  console.log(formData)
+  console.log(formData);
   try {
-    const res = await fetch('http://127.0.0.1:8000/event/update/' + name, {
-      method: 'PUT',
+    const res = await fetch("http://127.0.0.1:8000/event/update/" + name, {
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        "Content-Type": "application/json",
+        Accept: "application/json",
       },
       body: JSON.stringify(formData),
     });
 
     if (!res.ok) {
-      throw Error('Failed to edit event');
+      throw Error("Failed to edit event");
     }
   } catch (error) {
     console.error(error.message);
@@ -49,19 +49,19 @@ async function editEvent(name, formData) {
 }
 
 const style = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: '16px',
-  width: '100%',
-  height: '80px', // Set a fixed height for each row
-  backgroundColor: '#f5f5f5', // Light gray background color
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  padding: "16px",
+  width: "100%",
+  height: "80px", // Set a fixed height for each row
+  backgroundColor: "#f5f5f5", // Light gray background color
 };
 
 const formStyle = {
-  padding: '16px',
-  backgroundColor: '#ffffff', // White background color
-  width: '100%',
+  padding: "16px",
+  backgroundColor: "#ffffff", // White background color
+  width: "100%",
 };
 
 interface IEventRowProps {
@@ -71,13 +71,18 @@ interface IEventRowProps {
   thumbnail: string;
 }
 
-const EventRow: React.FC<IEventRowProps> = ({ name, date, description, thumbnail}) => {
+const EventRow: React.FC<IEventRowProps> = ({
+  name,
+  date,
+  description,
+  thumbnail,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState({
     name: name,
     date: date,
     description: description,
-    thumbnail: thumbnail
+    thumbnail: thumbnail,
   });
 
   const handleDelete = async () => {
@@ -89,13 +94,13 @@ const EventRow: React.FC<IEventRowProps> = ({ name, date, description, thumbnail
     setIsEditing(!isEditing);
   };
 
-  const handleSubmitEdit = async (e) => {
+  const handleSubmitEdit = async (e: any) => {
     e.preventDefault();
-  
+
     editEvent(name, editedData);
   };
 
-  const handleQuill = (field) => (value) => {
+  const handleQuill = (field: any) => (value: any) => {
     setEditedData({ ...editedData, [field]: value });
   };
 
@@ -107,7 +112,7 @@ const EventRow: React.FC<IEventRowProps> = ({ name, date, description, thumbnail
     <>
       <ListItem sx={style}>
         <ListItemText primary={name} secondary={`Date: ${date}`} />
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div style={{ display: "flex", alignItems: "center" }}>
           <IconButton href={"/admin/mail/" + name}>
             <MailIcon />
           </IconButton>
@@ -126,9 +131,21 @@ const EventRow: React.FC<IEventRowProps> = ({ name, date, description, thumbnail
       {isEditing && (
         <form onSubmit={handleSubmitEdit} sx={formStyle}>
           {/* Add form fields for editing */}
-          <TextField label="Edit Name" fullWidth margin="normal" value={editedData.name} onChange={handleChange('name')} />
-          <TextField type="Date" fullWidth margin="normal" value={editedData.date} onChange={handleChange('date')} />
-         
+          <TextField
+            label="Edit Name"
+            fullWidth
+            margin="normal"
+            value={editedData.name}
+            onChange={handleChange("name")}
+          />
+          <TextField
+            type="Date"
+            fullWidth
+            margin="normal"
+            value={editedData.date}
+            onChange={handleChange("date")}
+          />
+
           <ReactQuill
             label="Edit Description"
             multiline
@@ -136,18 +153,28 @@ const EventRow: React.FC<IEventRowProps> = ({ name, date, description, thumbnail
             fullWidth
             margin="normal"
             value={editedData.description}
-            onChange={(value) => handleQuill('description')(value)}
-        />
+            onChange={(value) => handleQuill("description")(value)}
+          />
 
-        <TextField fullWidth margin="normal" value={editedData.thumbnail} onChange={handleChange('thumbnail')} />
+          <TextField
+            fullWidth
+            margin="normal"
+            value={editedData.thumbnail}
+            onChange={handleChange("thumbnail")}
+          />
 
-          <Button type="submit" variant="contained" color="primary" style={{ marginTop: '16px' }}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            style={{ marginTop: "16px" }}
+          >
             Save Changes
           </Button>
         </form>
       )}
     </>
   );
-}
+};
 
 export default EventRow;

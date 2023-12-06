@@ -14,7 +14,23 @@ const acme = Acme({
   display: "swap",
 });
 
-const EventCard = () => {
+async function getData() {
+  // Fetch OTR Members Info
+  const res = await fetch("http://127.0.0.1:8000/events");
+  if (!res.ok) {
+    throw Error("Failed to fetch data");
+  }
+
+  return res.json();
+}
+
+interface IEventCardProps {
+  name: string;
+  date: string;
+  imageUrl?: string;
+}
+
+const EventCard: React.FC<IEventCardProps> = ({ name, date }) => {
   return (
     <Stack
       direction="column"
@@ -30,7 +46,7 @@ const EventCard = () => {
       <Typography
         sx={{ fontSize: "24px", mt: 1, fontFamily: acme.style.fontFamily }}
       >
-        Event Description
+        {name}
       </Typography>
     </Stack>
   );
@@ -66,9 +82,11 @@ const UpcomingCard = () => {
     </Box>
   );
 };
-const OurMission: React.FC<IOurMissionProps> = () => {
-  // ... your data and useEffect if needed
 
+const OurMission: React.FC<IOurMissionProps> = async () => {
+  // ... your data and useEffect if needed
+  const data = await getData();
+  const otrEvents = data["Events"];
   return (
     <Stack sx={{ mb: "10%", width: "100%" }}>
       <Typography
@@ -101,10 +119,17 @@ const OurMission: React.FC<IOurMissionProps> = () => {
             justifyContent="space-between"
             sx={{ p: 2, flexWrap: "wrap" }}
           >
-            <EventCard />
-            <EventCard />
-            <EventCard />
-            <EventCard />
+            {otrEvents.map((event: any, index: any) => {
+              const name = event["Name"];
+              const date = event["Date"];
+              const description = event["Description"];
+              const thumbnail = event["Thumbnail"];
+              const time = event["Time"];
+
+              if (name) {
+                return <EventCard name={name} />;
+              }
+            })}
           </Stack>
         </Paper>
         <Paper sx={{ width: "40%" }}>
@@ -121,6 +146,7 @@ const OurMission: React.FC<IOurMissionProps> = () => {
           >
             Upcoming Events
           </Box>
+
           <Stack sx={{ p: 2 }}>
             <UpcomingCard />
             <UpcomingCard />

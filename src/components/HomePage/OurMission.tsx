@@ -1,8 +1,11 @@
+"use client";
+
 import { Box, Paper, Stack, Typography } from "@mui/material";
-import React from "react";
-import OnTheRise from "../../../public/images/ontherisegroup.png"; // Update with the correct path to your image
+import React, { useEffect, useState } from "react";
+import OnTheRise from "../../../public/images/ontherisegroup.png";
 import Image from "next/image";
 import { Acme } from "next/font/google";
+
 interface IOurMissionProps {
   // ... your props if needed
 }
@@ -30,7 +33,7 @@ interface IEventCardProps {
   imageUrl?: string;
 }
 
-const EventCard: React.FC<IEventCardProps> = ({ name, date }) => {
+const EventCard: React.FC<IEventCardProps> = ({ name, date, imageUrl }) => {
   return (
     <Stack
       direction="column"
@@ -38,10 +41,9 @@ const EventCard: React.FC<IEventCardProps> = ({ name, date }) => {
       alignItems="center"
       sx={{ flexGrow: 1, flexBasis: "50%", mb: "3%" }}
     >
-      <Image
-        src={OnTheRise}
-        alt="Event"
-        style={{ width: "250px", height: "auto" }}
+      <img
+        src={imageUrl || OnTheRise}
+        style={{ width: "auto", height: "auto" }}
       />
       <Typography
         sx={{ fontSize: "24px", mt: 1, fontFamily: acme.style.fontFamily }}
@@ -52,41 +54,66 @@ const EventCard: React.FC<IEventCardProps> = ({ name, date }) => {
   );
 };
 
-const UpcomingCard = () => {
+interface IUpcomingCardProps {
+  name: string;
+  date: string;
+}
+
+
+const UpcomingCard: React.FC<IUpcomingCardProps> = ({ name, date }) => {
   return (
     <Box sx={{ background: "#DFDFDB", mb: "3%", px: 4, py: 2 }}>
+  
+          <Typography
+            sx={{
+              fontSize: "18px",
+              fontFamily: acme.style.fontFamily,
+              textAlign: "center", // Centering the text
+              marginBottom: "5px", // Adjusting margin
+            }}
+          >
+            {name}
+          </Typography>
+
+
       <Typography
         sx={{
-          fontSize: "18px",
+          fontSize: "15px",
           fontFamily: acme.style.fontFamily,
-          textAlign: "center",
+          textAlign: "center", // Centering the text
+          marginBottom: "5px", // Adjusting margin
         }}
       >
-        Event Title
-      </Typography>
-      <Typography
-        sx={{ fontSize: "15px", fontFamily: acme.style.fontFamily, mb: "5px" }}
-      >
-        Location: Event Location
-      </Typography>
-      <Typography
-        sx={{ fontSize: "15px", fontFamily: acme.style.fontFamily, mb: "5px" }}
-      >
-        Date: Event Date
-      </Typography>
-      <Typography
-        sx={{ fontSize: "15px", fontFamily: acme.style.fontFamily, mb: "5px" }}
-      >
-        Time: Event Time
+        Date: {date}
       </Typography>
     </Box>
   );
 };
 
-const OurMission: React.FC<IOurMissionProps> = async () => {
-  // ... your data and useEffect if needed
-  const data = await getData();
-  const otrEvents = data["Events"];
+
+
+const OurMission: React.FC<IOurMissionProps> = () => {
+  const [data, setData] = useState<any>({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getData();
+      setData(result);
+    };
+
+    fetchData();
+  }, []);
+
+  const otrEvents = data["Events"] || [];
+
+  const pastEvents = otrEvents
+    .filter((event: any) => new Date(event["Date"]) < new Date())
+    .slice(0, 5);
+
+  const upcomingEvents = otrEvents
+    .filter((event: any) => new Date(event["Date"]) >= new Date())
+    .slice(0, 5);
+
   return (
     <Stack sx={{ mb: "10%", width: "100%" }}>
       <Typography
@@ -97,10 +124,10 @@ const OurMission: React.FC<IOurMissionProps> = async () => {
           textAlign: "center",
         }}
       >
-        Our Mission
+
       </Typography>
-      <Stack direction="row" spacing={2}>
-        <Paper sx={{ width: "60%", height: "fit-content" }}>
+      <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
+        <Paper sx={{ width: { xs: "100%", md: "60%" }, height: "fit-content" }}>
           <Box
             sx={{
               background: "#EFD80A",
@@ -119,20 +146,18 @@ const OurMission: React.FC<IOurMissionProps> = async () => {
             justifyContent="space-between"
             sx={{ p: 2, flexWrap: "wrap" }}
           >
-            {otrEvents.map((event: any, index: any) => {
+            {pastEvents.map((event: any, index: any) => {
               const name = event["Name"];
               const date = event["Date"];
-              const description = event["Description"];
               const thumbnail = event["Thumbnail"];
-              const time = event["Time"];
 
               if (name) {
-                return <EventCard name={name} />;
+                return <EventCard key={index} name={name} imageUrl={thumbnail} />;
               }
             })}
           </Stack>
         </Paper>
-        <Paper sx={{ width: "40%" }}>
+        <Paper sx={{ width: { xs: "100%", md: "40%" } }}>
           <Box
             sx={{
               background: "#EFD80A",
@@ -148,10 +173,26 @@ const OurMission: React.FC<IOurMissionProps> = async () => {
           </Box>
 
           <Stack sx={{ p: 2 }}>
-            <UpcomingCard />
-            <UpcomingCard />
-            <UpcomingCard />
-            <UpcomingCard />
+            {upcomingEvents.length > 0 ? (
+              upcomingEvents.map((event: any, index: any) => {
+                const name = event["Name"];
+                const date = event["Date"];
+
+                if (name) {
+                  return <UpcomingCard key={index} name={name} date={date} />;
+                }
+              })
+            ) : (
+              <Typography
+                sx={{
+                  fontSize: "18px",
+                  fontFamily: acme.style.fontFamily,
+                  textAlign: "center",
+                }}
+              >
+                No Upcoming Events
+              </Typography>
+            )}
           </Stack>
         </Paper>
       </Stack>

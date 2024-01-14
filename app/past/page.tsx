@@ -15,7 +15,6 @@ async function getPast() {
 }
 
 const EventsPage = () => {
-  const [otrUpcoming, setOtrUpcoming] = useState([]);
   const [otrPast, setOtrPast] = useState([]);
 
   useEffect(() => {
@@ -40,16 +39,14 @@ const EventsPage = () => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="flex-start"> {/* Updated alignment to flex-start */}
+    <Box display="flex" flexDirection="column" alignItems="center"> {/* Center the content */}
       <EventButtons />
 
-      <Box display="flex" flexDirection="column" alignItems="flex-start"> {/* Updated alignment to flex-start */}
-        <Typography variant="h5" sx={{ color: "black", my: 2 }}>
-          Past Events
-        </Typography>
-        <Box display="flex" flexWrap="wrap" justifyContent="flex-start"> {/* Updated alignment to flex-start */}
-          {renderEventCards(otrPast)}
-        </Box>
+      <Typography variant="h5" sx={{ color: "black", my: 2 }}>
+        Past Events
+      </Typography>
+      <Box display="flex" flexWrap="wrap" justifyContent="center"> {/* Center the cards */}
+        {renderEventCards(otrPast)}
       </Box>
     </Box>
   );

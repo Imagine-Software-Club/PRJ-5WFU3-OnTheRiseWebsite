@@ -1,33 +1,43 @@
-'use client';
+// EventsPage.jsx
+"use client";
 
 import { Box, Typography, Paper, Grid } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useParams } from 'next/navigation'
-import RegisterForm from "../../../src/components/Forms/registerForm";// Import the necessary components and styles
+import React, { useState, useEffect } from "react";
+import { useParams } from 'next/navigation';
+import RegisterForm from "../../../src/components/Forms/registerForm";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-async function getData(params) {
-  const res = await fetch("http://127.0.0.1:8000/event/" + params.id);
-  if (!res.ok) {
-    throw Error("Failed to fetch data");
-  }
-
-  return res.json();
+function getData(params) {
+  return fetch("http://127.0.0.1:8000/event/" + params.id)
+    .then(res => {
+      if (!res.ok) {
+        throw Error("Failed to fetch data");
+      }
+      return res.json();
+    });
 }
 
-async function EventsPage() {
-  var data = {"Event": {}}
+function EventsPage() {
   const params = useParams();
-  
-  var count = true;
-  if(count){
-    data = await getData(params);
-    count = false;
-  }
+  const [data, setData] = useState({ "Event": {} });
 
-  
+  useEffect(() => {
+    let isMounted = true;
+
+    getData(params)
+      .then(result => {
+        if (isMounted) {
+          setData(result);
+        }
+      })
+      .catch(error => console.error(error));
+
+    return () => {
+      isMounted = false;
+    };
+  }, [params]);
 
   return (
     <Box p={3}>
@@ -37,19 +47,18 @@ async function EventsPage() {
           <Paper elevation={3} p={3} style={{ width: "100%", height: "auto" }}>
             <center>
               <Typography variant="h4">{data["Event"]["Name"]}</Typography>
-              <Typography variant="body1" dangerouslySetInnerHTML={{ __html: data["Event"]["Description"] }} />
               <Typography variant="body2">Date: {data["Event"]["Date"]}</Typography>
-              <Typography variant="body2">Time: {data["Event"]["Time"]}</Typography>
+              <Typography variant="body1" dangerouslySetInnerHTML={{ __html: data["Event"]["Description"] }} />
+              
+         
             </center>
           </Paper>
         </Grid>
 
-     
-
         {/* Register Form */}
         <Grid item xs={12} md={6}>
           <div style={{ width: "100%", display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <RegisterForm event={data["Event"]["Name"]} />
+            <RegisterForm event={data["Event"]["Name"]}/>
           </div>
         </Grid>
       </Grid>

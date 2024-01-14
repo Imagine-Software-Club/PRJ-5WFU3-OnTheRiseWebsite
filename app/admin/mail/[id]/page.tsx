@@ -1,14 +1,24 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
 import { Box, Button, Paper, Typography, TextField,  } from "@mui/material";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-
+function getData(params) {
+  return fetch("http://127.0.0.1:8000/event/" + params.id)
+    .then(res => {
+      if (!res.ok) {
+        throw Error("Failed to fetch data");
+      }
+      return res.json();
+    });
+}
 
 async function sendEmail(formData) {
     try {
+      console.log(formData)
       const res = await fetch('http://127.0.0.1:8000/emailList', {
         method: 'POST',
         headers: {
@@ -27,11 +37,41 @@ async function sendEmail(formData) {
   }
 
   const EmailList = () => {
-  const [formData, setFormData] = useState({
-    email: ["swabhankatkoori@gmail.com", "katkoor4@msu.edu"],
-    subject: "",
-    message: "",
-  });
+    const params = useParams();
+    const [data, setData] = useState({ "Event": {} });
+
+    const [formData, setFormData] = useState({
+      email: [],
+      subject: "",
+      message: "",
+    });
+
+    useEffect(() => {
+      let isMounted = true;
+
+      getData(params)
+        .then(result => {
+          if (isMounted) {
+            setData(result);
+
+            setFormData({
+              ...formData,
+              email: result["Event"]["Registered"],
+            });
+          }
+        })
+        .catch(error => console.error(error));
+
+      return () => {
+        isMounted = false;
+      };
+    }, [params]);
+
+    const lis = data["Event"]["Registered"];
+  
+
+  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -55,7 +95,7 @@ async function sendEmail(formData) {
 
       // Reset the form data
       setFormData({
-        email: ["swabhankatkoori@gmail.com", "katkoor4@msu.edu"],
+        email: lis,
         subject: "",
         message: "",
       });

@@ -1,9 +1,9 @@
-// RegisterForm.jsx
 import React, { useState } from "react";
-import { Box, Typography, Paper, Grid, TextField, Button } from "@mui/material";
+import { Box, Typography, Paper, Grid, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 
 async function registerEvent(formData) {
   try {
+    console.log(formData);
     const res = await fetch('http://127.0.0.1:8000/register', {
       method: 'POST',
       headers: {
@@ -38,18 +38,36 @@ const RegisterForm: React.FC<RegisterProps> = ({ event }) => {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleChange = (field: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [field]: e.target.value });
   };
 
   const handleAddEvent = async () => {
-    const success = await registerEvent(formData);
-    if (success) {
-      setSubmitted(true);
+    if (!submitted) {
+      setShowConfirmation(true);
     } else {
-      // Handle submission failure if needed
+      setFormData({ ...formData, event: event });
+
+      try {
+        const success = await registerEvent(formData);
+        if (success) {
+          setSubmitted(true);
+        } else {
+          // Handle submission failure if needed
+        }
+      } catch (error) {
+        console.error(error.message);
+        // Handle submission failure if needed
+      }
     }
+  };
+
+  const handleConfirmation = () => {
+    setShowConfirmation(false);
+    setFormData({ ...formData, event: event });
+    setSubmitted(true);
   };
 
   const resetForm = () => {
@@ -70,10 +88,10 @@ const RegisterForm: React.FC<RegisterProps> = ({ event }) => {
         {submitted ? (
           <React.Fragment>
             <Typography variant="h4" align="center" mb={2}>
-              Thank you for registering!
+              Registration Successful!
             </Typography>
             <Typography variant="body1" align="center" mb={2}>
-              We look forward to seeing you at the event.
+              Thank you for registering. We look forward to seeing you at the event.
             </Typography>
             <Button
               variant="contained"
@@ -146,13 +164,25 @@ const RegisterForm: React.FC<RegisterProps> = ({ event }) => {
                     onClick={handleAddEvent}
                     fullWidth
                   >
-                    Subscribe
+                    Register
                   </Button>
                 </Grid>
               </Grid>
             </form>
           </React.Fragment>
         )}
+        <Dialog open={showConfirmation} onClose={() => setShowConfirmation(false)}>
+          <DialogTitle>Confirm Registration</DialogTitle>
+          <DialogContent>
+            <Typography>
+              Are you sure you want to register for this event?
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setShowConfirmation(false)}>Cancel</Button>
+            <Button onClick={handleConfirmation} color="primary">Confirm</Button>
+          </DialogActions>
+        </Dialog>
       </Paper>
     </Box>
   );

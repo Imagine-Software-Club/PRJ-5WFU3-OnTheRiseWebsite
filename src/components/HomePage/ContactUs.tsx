@@ -7,7 +7,7 @@ import InstagramIcon from "../../../public/instagram.svg";
 import gmailIcon from "../../../public/google-gmail.svg";
 import phoneIcon from "../../../public/alternate-phone-square.svg";
 import _map from "lodash/map";
-//use this is data needs to be passed into component
+
 interface IContactUs {}
 
 const acme = Acme({
@@ -36,6 +36,7 @@ const contactInfo: Array<contact> = [
     text: "Arthur Marlowe (community service chair): 231-730-9089",
   },
 ];
+
 export const ContactUs: React.FC<IContactUs> = () => {
   return (
     <Stack
@@ -45,7 +46,7 @@ export const ContactUs: React.FC<IContactUs> = () => {
         alignItems: "center",
       }}
     >
-      <Typography sx={{ fontSize: "50px", fontFamily: acme.style.fontFamily }}>
+      <Typography sx={{ fontSize: "40px", fontFamily: acme.style.fontFamily }}>
         Contact Us
       </Typography>
       <Stack
@@ -56,15 +57,15 @@ export const ContactUs: React.FC<IContactUs> = () => {
         }}
       >
         {_map(contactInfo, (contacts: contact) => (
-          <Stack sx={{ alignItems: "center", flexDirection: "row", mb: "5%" }}>
+          <Stack sx={{ alignItems: "center", flexDirection: "row", mb: "3%" }}>
             <Image
               src={contacts.icon}
               alt=""
-              style={{ width: "100px", height: "auto" }}
+              style={{ width: "60px", height: "auto" }}
             />
             <Typography
               sx={{
-                fontSize: ["25px", "30px"],
+                fontSize: ["18px", "24px"],
                 ml: "2%",
                 fontFamily: acme.style.fontFamily,
               }}

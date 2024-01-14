@@ -1,6 +1,5 @@
 'use client';
 
-
 import React, { useEffect, useState } from "react";
 import { Box, Typography } from "@mui/material";
 import EventCard from "../../src/components/Cards/EventCard";
@@ -18,14 +17,11 @@ async function getUpcoming() {
 const EventsPage = () => {
   const [otrUpcoming, setOtrUpcoming] = useState([]);
 
-
   useEffect(() => {
     const fetchData = async () => {
       const upcomingData = await getUpcoming();
 
-
       setOtrUpcoming(upcomingData["Upcoming Events"]);
-
     };
 
     fetchData();
@@ -44,15 +40,14 @@ const EventsPage = () => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="flex-start"> {/* Updated alignment to flex-start */}
+    <Box display="flex" flexDirection="column" alignItems="center"> {/* Center the content */}
       <EventButtons />
       <Typography variant="h5" sx={{ color: "black", my: 2 }}>
         Upcoming Events
       </Typography>
-      <Box display="flex" flexWrap="wrap" justifyContent="flex-start"> {/* Updated alignment to flex-start */}
+      <Box display="flex" flexWrap="wrap" justifyContent="center"> {/* Center the cards */}
         {renderEventCards(otrUpcoming)}
       </Box>
-
     </Box>
   );
 };

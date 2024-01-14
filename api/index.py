@@ -94,7 +94,7 @@ class Event(BaseModel):
 async def upcomingPost(item: Event):
     doc_ref = db.collection("events").document(item.name)
     doc_ref.set({"Date": item.date, "Description": item.description,
-                 "Name": item.name, "Thumbnail": item.thumbnail})
+                 "Name": item.name, "Thumbnail": item.thumbnail, "Registerd": []})
 
     return {"Upcoming": doc_ref}
 
@@ -182,7 +182,7 @@ class Register(BaseModel):
     phone: str
 
 @app.post("/register")
-def pastPost(item: Register):
+def registerEvent(item: Register):
     # Add to events mailing list
     doc_ref = db.collection("events").document(item.event)
     event_data = doc_ref.get().to_dict()
@@ -282,7 +282,8 @@ async def send_mailList(email: EmailSchema):
 
     message = MessageSchema(
         subject = email.subject,
-        recipients =email.dict().get("email"),
+        recipients = [],
+        bcc = email.dict().get("email"),
         body = email.message,
         subtype= 'html'
     )
@@ -312,12 +313,13 @@ def upcomingEvents():
         else:
             print("Document does not exist!")
             
-    return {"OTR Members": result}
+    return {"Members": result}
 
 class Member(BaseModel):
     name: str
     role: str
     major: str
+    image: str
 
 @app.post("/members/post")
 async def add_member(member: Member):
@@ -331,10 +333,29 @@ async def add_member(member: Member):
     members_ref.set({
         "Name": member.name,
         "Role": member.role,
-        "Major": member.major
+        "Major": member.major,
+        "Image": member.image
     })
 
     return {"Added Member": member.name}
+
+@app.put("/members/update/{member_id}")
+async def update_member(member_id: str, updated_member: Event):
+    members_ref = db.collection("Members").document(member_id)
+
+    # Check if the event exists
+    if not members_ref.get().exists:
+        raise HTTPException(status_code=404, detail="Member not found")
+
+    # Update the event
+    members_ref.update({
+        "Name": updated_member.name,
+        "Role": updated_member.role,
+        "Major": updated_member.major,
+        "Image": updated_member.image
+    })
+
+    return {"Updated": member_id}
 
 @app.delete("/members/delete/{member_name}")
 async def delete_member(member_name: str):

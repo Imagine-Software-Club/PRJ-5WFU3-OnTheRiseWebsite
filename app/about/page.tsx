@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { Box, Typography, Paper } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import Confetti from "react-confetti";
@@ -30,7 +30,7 @@ const AboutUs = () => {
         .confetti-container {
           position: absolute;
           top: 0;
-          left: 0;
+          left: 0; /* Added line to position it on the left */
           width: 100%;
           height: 100%;
           pointer-events: none;

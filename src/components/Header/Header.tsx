@@ -1,10 +1,24 @@
-import { Button, Link, Stack, Typography } from "@mui/material";
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
-import OnTheRiseLogo from "public/images/OnTheRiseLogo.png";
-import SearchIcon from "public/images/Search_Icon.png";
+import OnTheRiseLogo from "../../../public/images/OnTheRiseLogo.png";
 import { Allison, Advent_Pro } from "next/font/google";
 import { map as _map } from "lodash";
+import {
+  AppBar,
+  Box,
+  Button,
+  IconButton,
+  Link,
+  Stack,
+  Toolbar,
+  Typography,
+  Drawer,
+  List,
+  ListItem,
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const allison = Allison({
   weight: ["400"],
@@ -30,6 +44,10 @@ const headerLink = [
     text: "Events",
   },
   {
+    href: "/calendar",
+    text: "Calendar",
+  },
+  {
     href: "/members",
     text: "Members",
   },
@@ -47,55 +65,91 @@ const headerLink = [
   },
 ];
 
-export const Header = () => {
+const Header = () => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const toggleDrawer = (open) => () => {
+    setIsDrawerOpen(open);
+  };
+
   return (
     <>
-      <Stack
+      <AppBar
+        position="sticky"
         sx={{
           background: "#131310",
           height: ["50px", "65px", "75px"],
-          position: "sticky",
           flexDirection: "row",
           alignItems: "center",
           zIndex: "1000",
-          top: "0",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "left",
-          }}
-        >
-          <Button href="/">
-            <Image
-              src={OnTheRiseLogo}
-              alt=""
-              style={{
-                width: "73px",
-                height: "73px",
-                objectFit: "fill",
-                margin: "20px",
-              }}
-            />
-          </Button>
-          <Typography
-            component={Link}
-            href="/"
-            style={{
-              color: "#FFFFFF",
-              fontSize: "25px",
-              fontFamily: allison.style.fontFamily,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              left: "192%",
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            onClick={toggleDrawer(true)}
+            sx={{
+              marginRight: "2",
+              display: ["flex", "none"], // Show only on smaller screens
             }}
           >
-            On The Rise
-          </Typography>
-        </div>
-      </Stack>
+            <MenuIcon />
+          </IconButton>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Button href="/">
+              <Image
+                src={OnTheRiseLogo}
+                alt=""
+                style={{
+                  width: "73px",
+                  height: "73px",
+                  objectFit: "fill",
+                  margin: "20px",
+                }}
+              />
+            </Button>
+            <Typography
+              component={Link}
+              href="/"
+              sx={{
+                color: "#FFFFFF",
+                fontSize: "25px",
+                fontFamily: allison.style.fontFamily,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              On The Rise
+            </Typography>
+          </div>
+        </Toolbar>
+      </AppBar>
+
+      <Drawer anchor="left" open={isDrawerOpen} onClose={toggleDrawer(false)}>
+        <List>
+          {_map(headerLink, (linkInfo, index) => (
+            <ListItem key={index}>
+              <Link
+                href={linkInfo.href}
+                color="inherit"
+                sx={{ textDecoration: "none", color: "#000000" }}
+                onClick={toggleDrawer(false)}
+              >
+                {linkInfo.text}
+              </Link>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
+
       <Stack
         sx={{
           background: "#1B1B1B",
@@ -182,23 +236,6 @@ export const Header = () => {
             )
           )}
           <div style={{ flex: 1 }}></div>
-          <Link
-            href="/search"
-            sx={{
-              mx: ["50px", "50px"],
-              margin: "auto",
-              textDecoration: "none",
-              ":hover": {
-                textDecoration: "none",
-              },
-            }}
-          >
-            <Image
-              src={SearchIcon}
-              alt="Search Icon"
-              style={{ width: "30px", height: "30px" }}
-            />
-          </Link>
         </Stack>
       </Stack>
     </>

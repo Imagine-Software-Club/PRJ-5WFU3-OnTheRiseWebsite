@@ -52,20 +52,20 @@ const EventsPage = () => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" alignItems="flex-start"> {/* Updated alignment to flex-start */}
+    <Box display="flex" flexDirection="column" alignItems="center"> {/* Center the content */}
       <EventButtons />
       <Typography variant="h5" sx={{ color: "black", my: 2 }}>
         Upcoming Events
       </Typography>
-      <Box display="flex" flexWrap="wrap" justifyContent="flex-start"> {/* Updated alignment to flex-start */}
+      <Box display="flex" flexWrap="wrap" justifyContent="center"> {/* Center the cards */}
         {renderEventCards(otrUpcoming)}
       </Box>
 
-      <Box display="flex" flexDirection="column" alignItems="flex-start"> {/* Updated alignment to flex-start */}
+      <Box display="flex" flexDirection="column" alignItems="center"> {/* Center the content */}
         <Typography variant="h5" sx={{ color: "black", my: 2 }}>
           Past Events
         </Typography>
-        <Box display="flex" flexWrap="wrap" justifyContent="flex-start"> {/* Updated alignment to flex-start */}
+        <Box display="flex" flexWrap="wrap" justifyContent="center"> {/* Center the cards */}
           {renderEventCards(otrPast)}
         </Box>
       </Box>

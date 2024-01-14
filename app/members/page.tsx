@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import React from "react";
 import MemberCard from "../../src/components/Cards/MemberCard";
 
@@ -15,58 +15,35 @@ async function getData() {
 
 export default async function MembersPage() {
   const data = await getData();
-  const otrMembers = data["OTR Members"];
+  const otrMembers = data["Members"];
 
-  const memberCards = otrMembers.map((member, index) => {
+  // Sort otrMembers alphabetically based on names
+  const sortedMembers = otrMembers.sort((a, b) => a.Name.localeCompare(b.Name));
+
+  const memberCards = sortedMembers.map((member, index) => {
     const name = member["Name"];
     const role = member["Role"];
     const image = member["Image"]
 
     if (name) {
-      return <MemberCard key={index} name={name} position={role} imageUrl={image}/>;
+      return <MemberCard key={index} name={name} position={role} imageUrl={image} />;
     }
     return null;
   });
 
-  // Split the memberCards into rows of 4
-  const rows = [];
-  for (let i = 0; i < memberCards.length; i += 4) {
-    rows.push(memberCards.slice(i, i + 4));
-  }
-
-  // Create rows with centered content, evenly spread across the page's width
-  const containerStyles = {
-    display: "flex",
-    flexDirection: "column", // Display rows vertically
-    alignItems: "center", // Center rows horizontally
-    margin: "75px",
-  };
-
-  const rowStyles = {
-    display: "flex",
-    justifyContent: "space-between", // Spread member cards evenly across the row
-    alignItems: "center",
-    marginBottom: "50px", // Add 50px margin between rows
-  };
-
-  const cardStyles = {
-    margin: "0 35px", // Add 25px margin between member cards in a row
-  };
-
   return (
-    <Box style={containerStyles}>
-      {rows.map((row, rowIndex) => (
-        <Box key={rowIndex} style={rowStyles}>
-          {row.map((card, cardIndex) => (
-            <Box key={cardIndex} style={cardStyles}>
-              {card}
-            </Box>
-          ))}
-        </Box>
-      ))}
+    <Box sx={{ textAlign: "center", margin: "20px 0" }}>
+      <br />
+      <br />
+      <Grid container spacing={2} justifyContent="center">
+        {memberCards.map((card, index) => (
+          <Grid item key={index} xs={12} sm={6} md={3} sx={{ textAlign: "center" }}>
+            {card}
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 }
-
 
 export const dynamic = "force-dynamic";

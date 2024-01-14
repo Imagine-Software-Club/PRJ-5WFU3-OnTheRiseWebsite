@@ -1,6 +1,9 @@
+
 import { Box } from "@mui/material";
 import React from "react";
 import MemberRow from "../../../src/components/AdminRows/memberRow";
+import CreateMember from "@/src/components/Forms/createMember";  // Correct import statement
+
 
 // Function to fetch data
 async function getData() {
@@ -15,20 +18,20 @@ async function getData() {
 
 export default async function MembersPage() {
   const data = await getData();
-  const otrMembers = data["OTR Members"];
+  const otrMembers = data["Members"];
 
-  const memberRow = otrMembers.map((member, index) => {
-    const name = member["Name"];
-    const position = member["Role"];
-    const major = member["Major"];
+  const memberRow = otrMembers.map((event, index) => {
+    const role = event["Role"];
+    const name = event["Name"];
+    const major = event["Major"];
+    const image = event["Image"];
 
     if (name) {
-      return <MemberRow key={index} name={name} position={position} major={major} />;
+      return <MemberRow key={index} name={name} role={role} major={major} image={image}/>;
     }
     return null;
   });
-
-
+  
   // Create rows with centered content, evenly spread across the page's width
   const containerStyles = {
     display: "flex",
@@ -44,11 +47,13 @@ export default async function MembersPage() {
   // Output the event rows
   return (
     <Box style={containerStyles}>
+      <CreateMember name = "" role = "" major = "" image = "" /> 
       {memberRow.map((row, rowIndex) => (
         <Box key={rowIndex} style={rowStyles}>
           {row}
         </Box>
       ))}
+  
     </Box>
   );
 }

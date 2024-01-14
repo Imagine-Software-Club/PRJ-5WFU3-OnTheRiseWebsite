@@ -132,13 +132,6 @@ const EventRow: React.FC<IEventRowProps> = ({
         <form onSubmit={handleSubmitEdit} sx={formStyle}>
           {/* Add form fields for editing */}
           <TextField
-            label="Edit Name"
-            fullWidth
-            margin="normal"
-            value={editedData.name}
-            onChange={handleChange("name")}
-          />
-          <TextField
             type="Date"
             fullWidth
             margin="normal"

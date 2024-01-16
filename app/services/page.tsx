@@ -1,7 +1,6 @@
 import React from "react";
-import { Box, Paper, Typography, Stack, Button } from "@mui/material";
 
-function Services() {
+const Services = () => {
   const serviceData = [
     {
       number: 1,
@@ -30,54 +29,31 @@ function Services() {
   ];
 
   return (
-    <Stack
-      sx={{
-        mb: "10%",
-        width: "100%",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Paper
-        elevation={3}
-        sx={{
-          padding: "20px",
-          maxWidth: "600px",
-          textAlign: "center",
-          background: "#f5f5f5",
-        }}
-      >
-        <Typography
-          variant="h4"
-          sx={{
-            color: "green",
-            mb: "3%",
-            fontFamily: "cursive",
-            fontSize: "2rem",
-          }}
-        >
+    
+    <div style={{ marginBottom: "10%", width: "100%", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+      <br/>
+      <br/>
+      <div style={{ padding: "20px", maxWidth: "600px", textAlign: "center", background: "#f5f5f5" }}>
+        <h4 style={{ color: "green", marginBottom: "3%", fontFamily: "cursive", fontSize: "2rem" }}>
           Explore Our Services
-        </Typography>
+        </h4>
 
         {serviceData.map((service) => (
-          <Box key={service.number} sx={{ mt: "3%" }}>
-            <Typography variant="h6" sx={{ color: "blue", fontFamily: "cursive" }}>
-              Service {service.number}
-            </Typography>
-            <Typography variant="h5" sx={{ mb: "2%" }}>
-              {service.title}
-            </Typography>
-            <Typography variant="body1">{service.description}</Typography>
-          </Box>
+          <div key={service.number} style={{ marginTop: "3%" }}>
+            <h5 style={{ marginBottom: "2%" }}>{service.title}</h5>
+            <p>{service.description}</p>
+          </div>
         ))}
 
-        <Button variant="contained" color="primary" style={{ marginTop: '16px' }} href="/contact-us">
+        <center>
+        <a href = "/contact-us">
+        <button style={{ display: "block", marginTop: "16px", padding: "10px 20px", background: "#4CAF50", color: "white", border: "none", borderRadius: "5px", cursor: "pointer" }}>
           Interested, Work with Us!
-        </Button>
-      </Paper>
-    </Stack>
+        </button>
+        </a>
+        </center>
+      </div>
+    </div>
   );
 };
 

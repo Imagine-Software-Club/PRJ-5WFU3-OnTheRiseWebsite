@@ -5,7 +5,6 @@ import Image from "next/image";
 import OnTheRiseLogo from "../../../public/images/OnTheRiseLogo.png";
 import { Allison, Advent_Pro } from "next/font/google";
 import { map as _map } from "lodash";
-
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from 'firebase/app';
 

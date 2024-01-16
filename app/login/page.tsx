@@ -1,8 +1,8 @@
 "use client";
+
 import React, { useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import styled from 'styled-components';
 
 // Firebase configuration
 const firebaseConfig = {
@@ -19,54 +19,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Styled components
-const Container = styled.div`
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-`;
-
-const Title = styled.h2`
-  text-align: center;
-  margin-bottom: 20px;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Label = styled.label`
-  margin-bottom: 8px;
-`;
-
-const Input = styled.input`
-  padding: 8px;
-  margin-bottom: 16px;
-`;
-
-const Button = styled.button`
-  padding: 10px;
-  background-color: #4caf50;
-  color: white;
-  cursor: pointer;
-  border: none;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: #45a049;
-  }
-`;
-
-const ErrorMessage = styled.p`
-  color: red;
-  margin-top: 10px;
-`;
-
+// Basic HTML and inline styles
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -106,44 +59,50 @@ const LoginForm = () => {
   const loggedIn = Boolean(auth.currentUser);
 
   return (
-    <Container>
-    <br/>
-    <br/>
-      <Title>Login Form</Title>
+    <div>
+      <br />
+      <br />
+    
+    <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+      
+      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Login Form</h2>
       {loggedIn ? (
-      <center>
-        <Button onClick={handleSignOut}>Sign Out</Button>
-      </center>
+        <center>
+          <button style={{ padding: '10px', backgroundColor: '#4caf50', color: 'white', cursor: 'pointer', border: 'none', borderRadius: '4px', transition: 'background-color 0.3s' }} onClick={handleSignOut}>Sign Out</button>
+        </center>
       ) : (
-        <Form onSubmit={handleLogin}>
-          <Label htmlFor="email">Email:</Label>
-          <Input
+        <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={handleLogin}>
+          <label style={{ marginBottom: '8px' }} htmlFor="email">Email:</label>
+          <input
             type="email"
             id="email"
             name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            style={{ padding: '8px', marginBottom: '16px' }}
           />
 
-          <Label htmlFor="password">Password:</Label>
-          <Input
+          <label style={{ marginBottom: '8px' }} htmlFor="password">Password:</label>
+          <input
             type="password"
             id="password"
             name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            style={{ padding: '8px', marginBottom: '16px' }}
           />
 
-          <Button type="submit" disabled={loading}>
+          <button style={{ padding: '10px', backgroundColor: '#4caf50', color: 'white', cursor: 'pointer', border: 'none', borderRadius: '4px', transition: 'background-color 0.3s' }} type="submit" disabled={loading}>
             {loading ? 'Logging in...' : 'Login'}
-          </Button>
-        </Form>
+          </button>
+        </form>
       )}
 
-      {error && <ErrorMessage>{error}</ErrorMessage>}
-    </Container>
+      {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
+    </div>
+    </div>
   );
 };
 

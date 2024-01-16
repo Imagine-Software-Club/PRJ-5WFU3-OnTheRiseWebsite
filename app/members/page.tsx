@@ -1,29 +1,36 @@
+"use client"
 import { Box, Grid } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MemberCard from "../../src/components/Cards/MemberCard";
 
-// Function to fetch data
-async function getData() {
-  // Fetch OTR Members Info
-  const res = await fetch("http://127.0.0.1:8000/members");
-  if (!res.ok) {
-    throw Error("Failed to fetch data");
-  }
+function MembersPage() {
+  const [data, setData] = useState([]);
 
-  return res.json();
-}
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch("http://127.0.0.1:8000/members");
+        if (!res.ok) {
+          throw Error("Failed to fetch data");
+        }
 
-export default async function MembersPage() {
-  const data = await getData();
-  const otrMembers = data["Members"];
+        const result = await res.json();
+        setData(result["Members"]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   // Sort otrMembers alphabetically based on names
-  const sortedMembers = otrMembers.sort((a, b) => a.Name.localeCompare(b.Name));
+  const sortedMembers = data.sort((a, b) => a.Name.localeCompare(b.Name));
 
   const memberCards = sortedMembers.map((member, index) => {
     const name = member["Name"];
     const role = member["Role"];
-    const image = member["Image"]
+    const image = member["Image"];
 
     if (name) {
       return <MemberCard key={index} name={name} position={role} imageUrl={image} />;
@@ -32,6 +39,7 @@ export default async function MembersPage() {
   });
 
   return (
+    <center>
     <Box sx={{ textAlign: "center", margin: "20px 0" }}>
       <br />
       <br />
@@ -43,7 +51,9 @@ export default async function MembersPage() {
         ))}
       </Grid>
     </Box>
+    </center>
   );
 }
 
+export default MembersPage;
 export const dynamic = "force-dynamic";

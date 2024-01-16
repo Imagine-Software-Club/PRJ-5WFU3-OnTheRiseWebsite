@@ -77,7 +77,7 @@ def upcomingEvents():
             print("Document does not exist!")
 
     result = sorted(result, key=lambda x: datetime.strptime(x.get("Date"), "%Y-%m-%d"), reverse = True)
-    
+    print(result)
     return {"Upcoming Events": result}
 
 
@@ -88,15 +88,6 @@ class Event(BaseModel):
     date: str
     description: str
     thumbnail: str
-
-
-@app.post("/event/post")
-async def upcomingPost(item: Event):
-    doc_ref = db.collection("events").document(item.name)
-    doc_ref.set({"Date": item.date, "Description": item.description,
-                 "Name": item.name, "Thumbnail": item.thumbnail, "Registerd": []})
-
-    return {"Upcoming": doc_ref}
 
 @app.get("/event/{event_id}")
 def event(event_id: str):
@@ -112,38 +103,6 @@ def event(event_id: str):
     this_event = doc.to_dict()
    
     return {"Event": this_event}
-
-@app.put("/event/update/{event_id}")
-async def update_event(event_id: str, updated_event: Event):
-    events_ref = db.collection("events").document(event_id)
-
-    # Check if the event exists
-    if not events_ref.get().exists:
-        raise HTTPException(status_code=404, detail="Event not found")
-
-    # Update the event
-    events_ref.update({
-        "Date": updated_event.date,
-        "Description": updated_event.description,
-        "Thumbnail": updated_event.thumbnail,
-        "Name": updated_event.name,
-    })
-
-    return {"Updated": event_id}
-
-@app.delete("/event/delete/{event_id}")
-async def delete_event(event_id: str):
-    events_ref = db.collection("events").document(event_id)
-
-    # Check if the event exists
-    if not events_ref.get().exists:
-        raise HTTPException(status_code=404, detail="Event not found")
-
-    # Delete the event
-    events_ref.delete()
-
-    return {"Deleted": event_id}
-
 
 # Past Events
 @app.get("/past")
@@ -259,7 +218,7 @@ async def send_mail(email: EmailSchema):
 
     message = MessageSchema(
         subject = email.subject + " | Email from " + email.from_email,
-        recipients =["swabhankatkoori@gmail.com"],
+        recipients =["otrmsuwebsite@gmail.com"],
         body = email.message,
         subtype= 'plain'
     )
@@ -320,54 +279,5 @@ class Member(BaseModel):
     role: str
     major: str
     image: str
-
-@app.post("/members/post")
-async def add_member(member: Member):
-    members_ref = db.collection("Members").document(member.name)
-
-    # Check if the member already exists
-    if members_ref.get().exists:
-        raise HTTPException(status_code=400, detail="Member with this name already exists")
-
-    # Add the new member
-    members_ref.set({
-        "Name": member.name,
-        "Role": member.role,
-        "Major": member.major,
-        "Image": member.image
-    })
-
-    return {"Added Member": member.name}
-
-@app.put("/members/update/{member_id}")
-async def update_member(member_id: str, updated_member: Event):
-    members_ref = db.collection("Members").document(member_id)
-
-    # Check if the event exists
-    if not members_ref.get().exists:
-        raise HTTPException(status_code=404, detail="Member not found")
-
-    # Update the event
-    members_ref.update({
-        "Name": updated_member.name,
-        "Role": updated_member.role,
-        "Major": updated_member.major,
-        "Image": updated_member.image
-    })
-
-    return {"Updated": member_id}
-
-@app.delete("/members/delete/{member_name}")
-async def delete_member(member_name: str):
-    members_ref = db.collection("Members").document(member_name)
-
-    # Check if the member exists
-    if not members_ref.get().exists:
-        raise HTTPException(status_code=404, detail="Member not found")
-
-    # Delete the member
-    members_ref.delete()
-
-    return {"Deleted Member": member_name}
 
 

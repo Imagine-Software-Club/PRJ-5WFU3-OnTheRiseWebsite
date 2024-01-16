@@ -1,23 +1,34 @@
 import React from "react";
 import { Box, Paper, Typography, Stack, Button } from "@mui/material";
 
-const ServiceCard = ({ number, title, description }) => {
-  return (
-    <Stack
-      direction="column"
-      spacing={2}
-      alignItems="center"
-      sx={{ flexGrow: 1, flexBasis: "50%", mb: "3%" }}
-    >
-      <Typography variant="body1">
-        <strong>{`${number}. ${title}`}</strong>
-      </Typography>
-      <Typography variant="body2">{description}</Typography>
-    </Stack>
-  );
-};
+function Services() {
+  const serviceData = [
+    {
+      number: 1,
+      title: "Community Service",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam justo nunc, scelerisque vel odio at, efficitur tincidunt justo.",
+    },
+    {
+      number: 2,
+      title: "Leadership",
+      description:
+        "Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.",
+    },
+    {
+      number: 3,
+      title: "Development",
+      description:
+        "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+    },
+    {
+      number: 4,
+      title: "Entertainment",
+      description:
+        "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    },
+  ];
 
-const Services = () => {
   return (
     <Stack
       sx={{
@@ -50,28 +61,20 @@ const Services = () => {
           Explore Our Services
         </Typography>
 
-        <ServiceCard
-          number={1}
-          title="Community Service"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam justo nunc, scelerisque vel odio at, efficitur tincidunt justo."
-        />
-        <ServiceCard
-          number={2}
-          title="Leadership"
-          description="Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis."
-        />
-        <ServiceCard
-          number={3}
-          title="Development"
-          description="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        />
-        <ServiceCard
-          number={4}
-          title="Entertainment"
-          description="Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-        />
-        <Button variant="contained" color="primary" style={{ marginTop: '16px' }} href = "/contact-us">
-        Interested, Work with Us!
+        {serviceData.map((service) => (
+          <Box key={service.number} sx={{ mt: "3%" }}>
+            <Typography variant="h6" sx={{ color: "blue", fontFamily: "cursive" }}>
+              Service {service.number}
+            </Typography>
+            <Typography variant="h5" sx={{ mb: "2%" }}>
+              {service.title}
+            </Typography>
+            <Typography variant="body1">{service.description}</Typography>
+          </Box>
+        ))}
+
+        <Button variant="contained" color="primary" style={{ marginTop: '16px' }} href="/contact-us">
+          Interested, Work with Us!
         </Button>
       </Paper>
     </Stack>

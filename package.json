@@ -35,7 +35,7 @@
     "firebase": "^10.7.0",
     "firebaseui": "^6.1.0",
     "lodash": "^4.17.21",
-    "next": "^14.0.3",
+    "next": "^14.0.4",
     "next.js": "^1.0.3",
     "nodemailer": "^6.9.7",
     "postcss": "8.4.23",

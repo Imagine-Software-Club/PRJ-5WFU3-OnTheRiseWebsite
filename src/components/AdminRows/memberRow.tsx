@@ -11,14 +11,43 @@ import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDN1I86mQrlp0BxQC5KF7gtYwqDlCz6ZQs",
+  authDomain: "otrwebsite-cf4d6.firebaseapp.com",
+  projectId: "otrwebsite-cf4d6",
+  storageBucket: "otrwebsite-cf4d6.appspot.com",
+  messagingSenderId: "933001896271",
+  appId: "1:933001896271:web:1abf3e97f61126776a653a",
+  measurementId: "G-9JRVNRGMLY"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+
 async function deleteMember(memberName) {
   try {
-    const res = await fetch("http://127.0.0.1:8000/members/delete/" + memberName, {
+    const user = auth.currentUser;
+
+    if (!user) {
+        throw Error('User not logged in');
+      }
+
+    const idToken = await user.getIdToken();
+
+    const res = await fetch("https://firestore.googleapis.com/v1/projects/otrwebsite-cf4d6/databases/(default)/documents/Members/" + memberName, {
       method: "DELETE",
+      headers: {
+          'Authorization': `Bearer ${idToken}`
+        }
     });
 
     if (!res.ok) {
-      throw Error("Failed to delete member");
+      throw Error("Failed to delete event");
     }
   } catch (error) {
     console.error(error.message);

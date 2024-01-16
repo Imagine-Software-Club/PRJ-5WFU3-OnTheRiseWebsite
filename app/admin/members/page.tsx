@@ -1,9 +1,9 @@
+"use client";
 
 import { Box } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MemberRow from "../../../src/components/AdminRows/memberRow";
-import CreateMember from "@/src/components/Forms/createMember";  // Correct import statement
-
+import CreateMember from "@/src/components/Forms/createMember";
 
 // Function to fetch data
 async function getData() {
@@ -16,22 +16,31 @@ async function getData() {
   return res.json();
 }
 
-export default async function MembersPage() {
-  const data = await getData();
-  const otrMembers = data["Members"];
+function MembersPage() {
+  const [otrMembers, setOtrMembers] = useState([]);
 
-  const memberRow = otrMembers.map((event, index) => {
-    const role = event["Role"];
-    const name = event["Name"];
-    const major = event["Major"];
-    const image = event["Image"];
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const result = await getData();
+        setOtrMembers(result["Members"]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
 
-    if (name) {
-      return <MemberRow key={index} name={name} role={role} major={major} image={image}/>;
+    fetchData();
+  }, []);
+
+  const memberRow = otrMembers.map((member, index) => {
+    const { Role, Name, Major, Image } = member;
+
+    if (Name) {
+      return <MemberRow key={index} name={Name} role={Role} major={Major} image={Image} />;
     }
     return null;
   });
-  
+
   // Create rows with centered content, evenly spread across the page's width
   const containerStyles = {
     display: "flex",
@@ -44,18 +53,20 @@ export default async function MembersPage() {
     marginBottom: "10px", // Add 10px margin between rows
   };
 
-  // Output the event rows
+  // Output the member rows
   return (
     <Box style={containerStyles}>
-      <CreateMember name = "" role = "" major = "" image = "" /> 
+      <CreateMember name="" role="" major="" image="" />
+      <br/>
+      <br/>
       {memberRow.map((row, rowIndex) => (
         <Box key={rowIndex} style={rowStyles}>
           {row}
         </Box>
       ))}
-  
     </Box>
   );
 }
 
+export default MembersPage;
 export const dynamic = "force-dynamic";

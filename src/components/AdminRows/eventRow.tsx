@@ -12,10 +12,39 @@ import Divider from "@mui/material/Divider";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDN1I86mQrlp0BxQC5KF7gtYwqDlCz6ZQs",
+  authDomain: "otrwebsite-cf4d6.firebaseapp.com",
+  projectId: "otrwebsite-cf4d6",
+  storageBucket: "otrwebsite-cf4d6.appspot.com",
+  messagingSenderId: "933001896271",
+  appId: "1:933001896271:web:1abf3e97f61126776a653a",
+  measurementId: "G-9JRVNRGMLY"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+
 async function deleteEvent(eventName) {
   try {
-    const res = await fetch("http://127.0.0.1:8000/event/delete/" + eventName, {
+    const user = auth.currentUser;
+
+    if (!user) {
+        throw Error('User not logged in');
+      }
+
+    const idToken = await user.getIdToken();
+
+    const res = await fetch("https://firestore.googleapis.com/v1/projects/otrwebsite-cf4d6/databases/(default)/documents/events/" + eventName, {
       method: "DELETE",
+      headers: {
+          'Authorization': `Bearer ${idToken}`
+        }
     });
 
     if (!res.ok) {
@@ -28,25 +57,49 @@ async function deleteEvent(eventName) {
 }
 
 async function editEvent(name, formData) {
-  console.log(formData);
   try {
-    const res = await fetch("http://127.0.0.1:8000/event/update/" + name, {
-      method: "PUT",
+    const user = auth.currentUser;
+
+    if (!user) {
+      throw Error('User not logged in');
+    }
+
+    const idToken = await user.getIdToken();
+
+    // Fetch the existing document
+    const existingRes = await fetch(`https://firestore.googleapis.com/v1/projects/otrwebsite-cf4d6/databases/(default)/documents/events/${name}`);
+    const existingData = await existingRes.json();
+
+    // Merge the new data with the existing data
+    const updatedData = {
+      ...existingData.fields,
+      Name: { stringValue: name },
+      Date: { stringValue: formData.date },
+      Description: { stringValue: formData.description },
+      Thumbnail: { stringValue: formData.thumbnail },
+    };
+
+    // Send the updated document back to Firestore
+    const res = await fetch(`https://firestore.googleapis.com/v1/projects/otrwebsite-cf4d6/databases/(default)/documents/events/${name}`, {
+      method: 'PATCH',
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${idToken}`,
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        fields: updatedData,
+      }),
     });
 
     if (!res.ok) {
-      throw Error("Failed to edit event");
+      throw Error('Failed to update event');
     }
   } catch (error) {
     console.error(error.message);
-    // Handle the error as needed, e.g., show a notification to the user
   }
 }
+
 
 const style = {
   display: "flex",

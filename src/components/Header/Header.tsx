@@ -1,10 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import OnTheRiseLogo from "../../../public/images/OnTheRiseLogo.png";
 import { Allison, Advent_Pro } from "next/font/google";
 import { map as _map } from "lodash";
+
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDN1I86mQrlp0BxQC5KF7gtYwqDlCz6ZQs",
+  authDomain: "otrwebsite-cf4d6.firebaseapp.com",
+  projectId: "otrwebsite-cf4d6",
+  storageBucket: "otrwebsite-cf4d6.appspot.com",
+  messagingSenderId: "933001896271",
+  appId: "1:933001896271:web:1abf3e97f61126776a653a",
+  measurementId: "G-9JRVNRGMLY"
+};
+
+// Initialize Firebase app
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+
 import {
   AppBar,
   Box,
@@ -71,6 +91,18 @@ const Header = () => {
   const toggleDrawer = (open) => () => {
     setIsDrawerOpen(open);
   };
+
+  useEffect(()=>{
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+          const uid = user.uid;
+          console.log("uid", uid)
+        } else {
+          console.log("user is logged out")
+        }
+      });
+     
+}, [])
 
   return (
     <>

@@ -1,9 +1,9 @@
+"use client";
 
 import { Box } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import EventRow from "../../../src/components/AdminRows/eventRow";
-import CreateEvent from "@/src/components/Forms/createEvent";  // Correct import statement
-import { timeEnd } from "console";
+import CreateEvent from "@/src/components/Forms/createEvent";
 
 // Function to fetch data
 async function getData() {
@@ -16,19 +16,27 @@ async function getData() {
   return res.json();
 }
 
-export default async function MembersPage() {
-  const data = await getData();
-  const otrEvents = data["Events"];
+function MembersPage() {
+  const [otrEvents, setOtrEvents] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const result = await getData();
+        setOtrEvents(result["Events"]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   const eventRow = otrEvents.map((event, index) => {
-    const name = event["Name"];
-    const date = event["Date"];
-    const description = event["Description"];
-    const thumbnail = event["Thumbnail"];
-    const time = event["Time"];
+    const { Name, Date, Description, Thumbnail, Time } = event;
 
-    if (name) {
-      return <EventRow key={index} name={name} date={date} description={description} thumbnail={thumbnail} time = {time}/>;
+    if (Name) {
+      return <EventRow key={index} name={Name} date={Date} description={Description} thumbnail={Thumbnail} time={Time} />;
     }
     return null;
   });
@@ -48,7 +56,9 @@ export default async function MembersPage() {
   // Output the event rows
   return (
     <Box style={containerStyles}>
-      <CreateEvent name = "" description = "" date = "" time = "" thumbnail = ""/> 
+      <CreateEvent name="" description="" date="" time="" thumbnail="" />
+      <br/>
+      <br/>
       {eventRow.map((row, rowIndex) => (
         <Box key={rowIndex} style={rowStyles}>
           {row}
@@ -58,4 +68,5 @@ export default async function MembersPage() {
   );
 }
 
+export default MembersPage;
 export const dynamic = "force-dynamic";

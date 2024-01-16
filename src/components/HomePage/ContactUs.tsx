@@ -37,7 +37,7 @@ const contactInfo: Array<contact> = [
   },
 ];
 
-export const ContactUs: React.FC<IContactUs> = () => {
+const ContactUs: React.FC<IContactUs> = () => {
   return (
     <Stack
       sx={{

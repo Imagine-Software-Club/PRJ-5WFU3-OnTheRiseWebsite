@@ -7,7 +7,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 function getData(params) {
-  return fetch("http://127.0.0.1:8000/event/" + params.id)
+  return fetch("https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/event/" + params.id)
     .then(res => {
       if (!res.ok) {
         throw Error("Failed to fetch data");

@@ -8,7 +8,7 @@ import CreateMember from "@/src/components/Forms/createMember";
 // Function to fetch data
 async function getData() {
   // Fetch OTR Members Info
-  const res = await fetch("http://127.0.0.1:8000/members");
+  const res = await fetch("https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/members");
   if (!res.ok) {
     throw Error("Failed to fetch data");
   }

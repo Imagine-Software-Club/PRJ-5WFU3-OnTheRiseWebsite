@@ -5,7 +5,7 @@ import { Box, TextField, Button, Paper, Typography } from "@mui/material";
 
 async function sendEmail(formData) {
   try {
-    const res = await fetch('http://127.0.0.1:8000/contact_us', {
+    const res = await fetch('https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/contact_us', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

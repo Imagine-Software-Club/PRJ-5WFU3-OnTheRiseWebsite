@@ -61,7 +61,7 @@ const UpcomingCard: React.FC<IUpcomingCardProps> = ({ name, date }) => (
 );
 
 async function getData() {
-  const res = await fetch("http://127.0.0.1:8000/events");
+  const res = await fetch("https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/events");
   if (!res.ok) {
     throw Error("Failed to fetch data");
   }

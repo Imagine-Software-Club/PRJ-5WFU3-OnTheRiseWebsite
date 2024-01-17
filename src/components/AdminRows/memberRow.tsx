@@ -55,26 +55,6 @@ async function deleteMember(memberName) {
   }
 }
 
-async function editMember(name, formData) {
-  console.log(formData)
-  try {
-    const res = await fetch("http://127.0.0.1:8000/members/update/" + name, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (!res.ok) {
-      throw Error("Failed to edit member");
-    }
-  } catch (error) {
-    console.error(error.message);
-    // Handle the error as needed, e.g., show a notification to the user
-  }
-}
 
 const style = {
   display: "flex",

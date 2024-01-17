@@ -6,7 +6,7 @@ import EventCard from "../../src/components/Cards/EventCard";
 import EventButtons from "../../src/components/EventButtons";
 
 async function getUpcoming() {
-  const res = await fetch("http://127.0.0.1:8000/upcoming");
+  const res = await fetch("https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/upcoming");
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
@@ -15,7 +15,7 @@ async function getUpcoming() {
 }
 
 async function getPast() {
-  const res = await fetch("http://127.0.0.1:8000/past");
+  const res = await fetch("https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/past");
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }

@@ -26,8 +26,8 @@ const EventsPage = () => {
     fetchData();
   }, []);
 
-  const renderEventCards = (events) => {
-    return events.map((event, index) => (
+  const renderEventCards = (events: any) => {
+    return events.map((event: any, index: any) => (
       <Box key={index} margin="0 10px 20px 0" width="250px">
         <EventCard
           name={event["Name"]}

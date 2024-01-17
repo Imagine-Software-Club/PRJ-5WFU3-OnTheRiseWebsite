@@ -22,7 +22,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-async function postEvent(formData) {
+async function postEvent(formData:any) {
   try {
     const user = auth.currentUser;
 
@@ -55,7 +55,7 @@ async function postEvent(formData) {
       throw Error('Failed to post event');
     }
   } catch (error) {
-    console.error(error.message);
+    console.error("afdlakdfj");
     // Handle the error as needed, e.g., show a notification to the user
   }
 }
@@ -96,13 +96,18 @@ const CreateEvent: React.FC<CreateEventProps> = ({ name, date, description, thum
     setFormData({ ...formData, [field]: e.target.value });
   };
 
-  const handleQuill = (field) => (value) => {
+  const handleQuill = (field:any) => (value:any) => {
     setFormData({ ...formData, [field]: value });
   };
 
   const handleAddEvent = () => {
     if (!userLoggedIn) {
       alert('You need to be logged in to add an event.'); // Show a warning message
+      return;
+    }
+
+    if (!formData.name || !formData.date || !formData.description || !formData.thumbnail) {
+      alert('All fields are required.');
       return;
     }
 
@@ -123,20 +128,14 @@ const CreateEvent: React.FC<CreateEventProps> = ({ name, date, description, thum
       </div>
     )}
 
-    <TextField label="Event Name" fullWidth margin="normal" value={formData.name} onChange={handleChange('name')} />
-    <TextField type="Date" fullWidth margin="normal" value={formData.date} onChange={handleChange('date')} />
-    <TextField type="Time" fullWidth margin="normal"/>
+    <TextField label="Event Name" fullWidth margin="normal" value={formData.name} onChange={handleChange('name')} required />
+    <TextField type="Date" fullWidth margin="normal" value={formData.date} onChange={handleChange('date')} required/>
    
     <ReactQuill
-      label="Description"
-      multiline
-      rows={4}
-      fullWidth
-      margin="normal"
       value={formData.description}
       onChange={(value) => handleQuill('description')(value)}
     />
-    <TextField label="Image Link" fullWidth margin="normal" value={formData.thumbnail} onChange={handleChange('thumbnail')} />
+    <TextField label="Image Link" fullWidth margin="normal" value={formData.thumbnail} onChange={handleChange('thumbnail')} required/>
     
     <center>
     <Button variant="contained" color="primary" style={{ marginTop: '16px' }} onClick={handleAddEvent}>

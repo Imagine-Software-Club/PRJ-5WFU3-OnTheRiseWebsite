@@ -26,13 +26,13 @@ export default function EventButtons() {
 
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer}>
         <List>
-          <ListItem button component="a" href="/upcoming">
+          <ListItem component="a" href="/upcoming">
             <ListItemText primary="Upcoming" />
           </ListItem>
-          <ListItem button component="a" href="/past">
+          <ListItem component="a" href="/past">
             <ListItemText primary="Past" />
           </ListItem>
-          <ListItem button component="a" href="/calendar">
+          <ListItem component="a" href="/calendar">
             <ListItemText primary="Calendar" />
           </ListItem>
           {/* Add more list items for other pages as needed */}

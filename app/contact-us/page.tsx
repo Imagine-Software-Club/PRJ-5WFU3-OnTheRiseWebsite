@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, Paper, Typography } from "@mui/material";
 
-async function sendEmail(formData) {
+async function sendEmail(formData: any) {
   try {
     const res = await fetch('https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/contact_us', {
       method: 'POST',
@@ -18,7 +18,7 @@ async function sendEmail(formData) {
       throw Error('Failed to post event');
     }
   } catch (error) {
-    console.error(error.message);
+    console.error("error");
   }
 }
 

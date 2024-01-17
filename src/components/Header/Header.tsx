@@ -87,7 +87,7 @@ const headerLink = [
 const Header = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const toggleDrawer = (open) => () => {
+  const toggleDrawer = (open:any) => () => {
     setIsDrawerOpen(open);
   };
 

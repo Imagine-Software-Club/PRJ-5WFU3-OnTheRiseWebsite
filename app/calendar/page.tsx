@@ -4,8 +4,14 @@ import React, { useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 
-async function getEvents() {
-  console.log("got here")
+interface IEvent {
+  Name: string;
+  Date: string;
+  // Add other properties as needed
+}
+
+async function getEvents(): Promise<{ Events: IEvent[] }> {
+  console.log("got here");
   const res = await fetch("https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/events");
   if (!res.ok) {
     throw Error("Failed to fetch data");
@@ -15,14 +21,14 @@ async function getEvents() {
 }
 
 export default function CalendarPage() {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState<IEvent[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const eventData = await getEvents();
         console.log("Event Data:", eventData); // Log the entire event data for debugging
-        setEvents(eventData["Events"]  || []);
+        setEvents(eventData.Events || []);
       } catch (error) {
         console.error("Error fetching events:", error);
       }
@@ -44,9 +50,9 @@ export default function CalendarPage() {
   return (
     <Box>
       <center>
-        <br></br>
+        <br />
         {/* Add your EventButtons component here if needed */}
-        <br></br>
+        <br />
       </center>
       <FullCalendar
         plugins={[dayGridPlugin]}

@@ -13,6 +13,8 @@ interface IEventCardProps {
   imageUrl?: string;
 }
 
+
+
 const EventCard: React.FC<IEventCardProps> = ({ name, date, imageUrl }) => (
   <Stack
     direction="column"
@@ -21,7 +23,7 @@ const EventCard: React.FC<IEventCardProps> = ({ name, date, imageUrl }) => (
     sx={{ flexGrow: 1, flexBasis: "50%", mb: "3%" }}
   >
     <img
-      src={imageUrl || OnTheRise}
+      src={imageUrl}
       style={{ width: "auto", height: "auto" }}
     />
     <Typography
@@ -68,9 +70,22 @@ async function getData() {
 
   return res.json();
 }
+// ... (existing imports)
+
+interface IEvent {
+  Name: string;
+  Thumbnail?: string;
+  Date: string;
+  // Add other properties as needed
+}
+
+interface IEventsData {
+  Events: IEvent[];
+  // Add other properties as needed
+}
 
 const HomePageContent: React.FC<IOurMissionProps> = () => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState<IEventsData>({ Events: [] });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -128,12 +143,12 @@ const HomePageContent: React.FC<IOurMissionProps> = () => {
             justifyContent="space-between"
             sx={{ p: 2, flexWrap: "wrap" }}
           >
-            {pastEvents.map((event: any, index: any) => (
+            {pastEvents.map((event: IEvent, index: number) => (
               <EventCard
                 key={index}
-                name={event["Name"]}
-                imageUrl={event["Thumbnail"]}
-                date={event["Date"]}
+                name={event.Name}
+                imageUrl={event.Thumbnail}
+                date={event.Date}
               />
             ))}
           </Stack>
@@ -154,11 +169,11 @@ const HomePageContent: React.FC<IOurMissionProps> = () => {
 
           <Stack sx={{ p: 2 }}>
             {upcomingEvents.length > 0 ? (
-              upcomingEvents.map((event: any, index: any) => (
+              upcomingEvents.map((event: IEvent, index: number) => (
                 <UpcomingCard
                   key={index}
-                  name={event["Name"]}
-                  date={event["Date"]}
+                  name={event.Name}
+                  date={event.Date}
                 />
               ))
             ) : (
@@ -174,13 +189,12 @@ const HomePageContent: React.FC<IOurMissionProps> = () => {
           </Stack>
         </Paper>
       </Stack>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <ContactUs/>
+      <br />
+      <br />
+      <br />
+      <br />
+      <ContactUs />
     </Stack>
-    
   );
 };
 

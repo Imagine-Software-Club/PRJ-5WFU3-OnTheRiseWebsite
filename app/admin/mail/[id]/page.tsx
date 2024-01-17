@@ -1,12 +1,20 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { Box, Button, Paper, Typography, TextField,  } from "@mui/material";
+import { Box, Button, Paper, Typography, TextField } from "@mui/material";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-function getData(params) {
+// Define an interface for the expected structure of the API response
+interface EventData {
+  Event: {
+    Registered: string[]; // Assuming 'Registered' is an array of emails
+    // Add other properties as needed
+  };
+  // Add other properties as needed
+}
+
+function getData(params: any): Promise<EventData> {
   return fetch("https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/event/" + params.id)
     .then(res => {
       if (!res.ok) {
@@ -16,61 +24,58 @@ function getData(params) {
     });
 }
 
-async function sendEmail(formData) {
-    try {
-      console.log(formData)
-      const res = await fetch('http://127.0.0.1:8000/emailList', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-  
-      if (!res.ok) {
-        throw Error('Failed to post event');
-      }
-    } catch (error) {
-      console.error(error.message);
-    }
-  }
-
-  const EmailList = () => {
-    const params = useParams();
-    const [data, setData] = useState({ "Event": {} });
-
-    const [formData, setFormData] = useState({
-      email: [],
-      subject: "",
-      message: "",
+async function sendEmail(formData: any) {
+  try {
+    console.log(formData);
+    const res = await fetch('http://127.0.0.1:8000/emailList', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(formData),
     });
 
-    useEffect(() => {
-      let isMounted = true;
+    if (!res.ok) {
+      throw Error('Failed to post event');
+    }
+  } catch (error) {
+    console.error("afdkljdfsl");
+  }
+}
 
-      getData(params)
-        .then(result => {
-          if (isMounted) {
-            setData(result);
+const EmailList = () => {
+  const params = useParams();
+  const [data, setData] = useState<EventData>({ Event: { Registered: [] } });
 
-            setFormData({
-              ...formData,
-              email: result["Event"]["Registered"],
-            });
-          }
-        })
-        .catch(error => console.error(error));
+  const [formData, setFormData] = useState({
+    email: [] as string[], // Assuming 'email' is an array of strings
+    subject: "",
+    message: "",
+  });
 
-      return () => {
-        isMounted = false;
-      };
-    }, [params]);
+  useEffect(() => {
+    let isMounted = true;
 
-    const lis = data["Event"]["Registered"];
-  
+    getData(params)
+      .then((result: EventData) => {
+        if (isMounted) {
+          setData(result);
 
-  
+          setFormData({
+            ...formData,
+            email: result.Event.Registered,
+          });
+        }
+      })
+      .catch(error => console.error(error));
+
+    return () => {
+      isMounted = false;
+    };
+  }, [params]);
+
+  const lis = data.Event.Registered;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -79,7 +84,7 @@ async function sendEmail(formData) {
     setFormData({ ...formData, [field]: e.target.value });
   };
 
-  const handleQuill = (field) => (value) => {
+  const handleQuill = (field: any) => (value: any) => {
     setFormData({ ...formData, [field]: value });
   };
 

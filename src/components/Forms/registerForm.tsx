@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Box, Typography, Paper, Grid, TextField, Button } from "@mui/material";
 
-async function registerEvent(formData, event) {
+async function registerEvent(formData:any, event:any) {
   try {
     formData.event = event;
     const res = await fetch('https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/register', {
@@ -20,7 +20,7 @@ async function registerEvent(formData, event) {
 
     return true; // Return true for successful submission
   } catch (error) {
-    console.error(error.message);
+    console.error("fdajkdlfjsd");
     return false; // Return false for failed submission
   }
 }
@@ -66,7 +66,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ event }) => {
 
   return (
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh">
-      <Paper elevation={3} p={3} width="80%" maxwidth="600px">
+      <Paper elevation={3} sx={{ width: "80%", height: "auto", p: 3 }}>
         <br></br>
         {submitted ? (
           <React.Fragment>

@@ -22,7 +22,7 @@ export default async function ExecutiveBoard() {
 
   const otrMembers = data['OTR Members'];
 
-  const memberCards = otrMembers.map((member, index) => {
+  const memberCards = otrMembers.map((member:any, index:any) => {
     const name = member['Name'];
     const role = member['Role'];
 
@@ -36,7 +36,7 @@ export default async function ExecutiveBoard() {
   {/* Utilizes the Member Card Component in /src/components/cards */}
   return (
     <Box display="flex" justifyContent="space-between" margin="0 -10px">
-      {memberCards.slice(0, 3).map((card, index) => (
+      {memberCards.slice(0, 3).map((card:any, index:any) => (
         <Box key={index} margin="0 100px">
           {card}
         </Box>

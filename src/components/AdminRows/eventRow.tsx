@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
@@ -30,7 +31,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 
-async function deleteEvent(eventName) {
+async function deleteEvent(eventName: any) {
   try {
     const user = auth.currentUser;
 
@@ -51,12 +52,12 @@ async function deleteEvent(eventName) {
       throw Error("Failed to delete event");
     }
   } catch (error) {
-    console.error(error.message);
+    console.error("afkladsf");
     // Handle the error as needed, e.g., show a notification to the user
   }
 }
 
-async function editEvent(name, formData) {
+async function editEvent(name: any, formData: any) {
   try {
     const user = auth.currentUser;
 
@@ -96,7 +97,7 @@ async function editEvent(name, formData) {
       throw Error('Failed to update event');
     }
   } catch (error) {
-    console.error(error.message);
+    console.error("afdkljfdals");
   }
 }
 
@@ -113,7 +114,7 @@ const style = {
 
 const formStyle = {
   padding: "16px",
-  backgroundColor: "#ffffff", // White background color
+  backgroundColor: "#ffffff",
   width: "100%",
 };
 
@@ -157,7 +158,7 @@ const EventRow: React.FC<IEventRowProps> = ({
     setEditedData({ ...editedData, [field]: value });
   };
 
-  const handleChange = (field) => (e) => {
+  const handleChange = (field: any) => (e: any) => {
     setEditedData({ ...editedData, [field]: e.target.value });
   };
 
@@ -180,9 +181,10 @@ const EventRow: React.FC<IEventRowProps> = ({
         </div>
       </ListItem>
       <Divider />
-
       {isEditing && (
-        <form onSubmit={handleSubmitEdit} sx={formStyle}>
+     <Box sx={formStyle}>
+      
+        <form onSubmit={handleSubmitEdit}>
           {/* Add form fields for editing */}
           <TextField
             type="Date"
@@ -192,15 +194,11 @@ const EventRow: React.FC<IEventRowProps> = ({
             onChange={handleChange("date")}
           />
 
-          <ReactQuill
-            label="Edit Description"
-            multiline
-            rows={4}
-            fullWidth
-            margin="normal"
-            value={editedData.description}
-            onChange={(value) => handleQuill("description")(value)}
-          />
+      <ReactQuill
+        value={editedData.description}
+        onChange={(value) => handleQuill("description")(value)}
+      />
+
 
           <TextField
             fullWidth
@@ -218,7 +216,9 @@ const EventRow: React.FC<IEventRowProps> = ({
             Save Changes
           </Button>
         </form>
-      )}
+      
+    </Box>
+    )}
     </>
   );
 };

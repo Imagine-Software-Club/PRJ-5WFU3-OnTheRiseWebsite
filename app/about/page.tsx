@@ -1,7 +1,9 @@
+// AboutUs.jsx
 'use client';
 import { Box, Typography, Paper } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import Confetti from "react-confetti";
+import dynamic from 'next/dynamic';
+const Confetti = dynamic(() => import("react-confetti"), { ssr: false });
 
 const AboutUs = () => {
   const [showConfetti, setShowConfetti] = useState(true);
@@ -30,7 +32,7 @@ const AboutUs = () => {
         .confetti-container {
           position: absolute;
           top: 0;
-          left: 0; /* Added line to position it on the left */
+          left: 0;
           width: 100%;
           height: 100%;
           pointer-events: none;
@@ -39,12 +41,14 @@ const AboutUs = () => {
       `}</style>
 
       {showConfetti && (
-        <Confetti
-          width={window.innerWidth}
-          height={window.innerHeight}
-          numberOfPieces={200}
-          style={{ display: "block", zIndex: 1 }}
-        />
+        <div className="confetti-container">
+          <Confetti
+            width={typeof window !== 'undefined' ? window.innerWidth : 0}
+            height={typeof window !== 'undefined' ? window.innerHeight : 0}
+            numberOfPieces={200}
+            style={{ display: "block", zIndex: 1 }}
+          />
+        </div>
       )}
 
       <Paper
@@ -68,8 +72,6 @@ const AboutUs = () => {
           Join us on our journey and be a part of THE BEST ORG ON CAMP!
         </Typography>
       </Paper>
-
-      <div id="confetti-container" className="confetti-container"></div>
     </Box>
   );
 };

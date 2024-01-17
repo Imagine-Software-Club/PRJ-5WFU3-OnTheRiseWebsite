@@ -29,7 +29,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 
-async function deleteMember(memberName) {
+async function deleteMember(memberName:any) {
   try {
     const user = auth.currentUser;
 
@@ -50,7 +50,7 @@ async function deleteMember(memberName) {
       throw Error("Failed to delete event");
     }
   } catch (error) {
-    console.error(error.message);
+    console.error("afds");
     // Handle the error as needed, e.g., show a notification to the user
   }
 }
@@ -97,13 +97,7 @@ const MemberRow: React.FC<IMemberRowProps> = ({ name, role, major, image }) => {
     setIsEditing(!isEditing);
   };
 
-  const handleSubmitEdit = async (e: any) => {
-    e.preventDefault();
-
-    editMember(name, editedData);
-  };
-
-  const handleChange = (field) => (e) => {
+  const handleChange = (field:any) => (e:any) => {
     setEditedData({ ...editedData, [field]: e.target.value });
   };
 
@@ -123,42 +117,6 @@ const MemberRow: React.FC<IMemberRowProps> = ({ name, role, major, image }) => {
           </div>
         </ListItem>
         <Divider />
-
-        {isEditing && (
-          <form onSubmit={handleSubmitEdit} sx={formStyle}>
-            {/* Add form fields for editing */}
-            <TextField
-              label="Edit Role"
-              fullWidth
-              margin="normal"
-              value={editedData.role}
-              onChange={handleChange("role")}
-            />
-            <TextField
-              label="Edit Major"
-              fullWidth
-              margin="normal"
-              value={editedData.major}
-              onChange={handleChange("major")}
-            />
-            <TextField
-              label="Edit Image"
-              fullWidth
-              margin="normal"
-              value={editedData.image}
-              onChange={handleChange("image")}
-            />
-
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              style={{ marginTop: "16px" }}
-            >
-              Save Changes
-            </Button>
-          </form>
-        )}
       </Stack>
     </Box>
   );

@@ -19,7 +19,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-async function postMember(formData) {
+async function postMember(formData:any) {
   try {
     const user = auth.currentUser;
 
@@ -50,7 +50,7 @@ async function postMember(formData) {
       throw Error('Failed to post member');
     }
   } catch (error) {
-    console.error(error.message);
+    console.error("dfasfds");
     // Handle the error as needed, e.g., show a notification to the user
   }
 }

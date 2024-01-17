@@ -1,10 +1,17 @@
-"use client"
+"use client";
 import { Box, Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import MemberCard from "../../src/components/Cards/MemberCard";
 
+interface IMember {
+  Name: string;
+  Role: string;
+  Image: string;
+  // Add other properties as needed
+}
+
 function MembersPage() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<IMember[]>([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -15,7 +22,7 @@ function MembersPage() {
         }
 
         const result = await res.json();
-        setData(result["Members"]);
+        setData(result.Members || []);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -28,9 +35,9 @@ function MembersPage() {
   const sortedMembers = data.sort((a, b) => a.Name.localeCompare(b.Name));
 
   const memberCards = sortedMembers.map((member, index) => {
-    const name = member["Name"];
-    const role = member["Role"];
-    const image = member["Image"];
+    const name = member.Name;
+    const role = member.Role;
+    const image = member.Image;
 
     if (name) {
       return <MemberCard key={index} name={name} position={role} imageUrl={image} />;
@@ -40,17 +47,17 @@ function MembersPage() {
 
   return (
     <center>
-    <Box sx={{ textAlign: "center", margin: "20px 0" }}>
-      <br />
-      <br />
-      <Grid container spacing={2} justifyContent="center">
-        {memberCards.map((card, index) => (
-          <Grid item key={index} xs={12} sm={6} md={3} sx={{ textAlign: "center" }}>
-            {card}
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+      <Box sx={{ textAlign: "center", margin: "20px 0" }}>
+        <br />
+        <br />
+        <Grid container spacing={2} justifyContent="center">
+          {memberCards.map((card, index) => (
+            <Grid item key={index} xs={12} sm={6} md={3} sx={{ textAlign: "center" }}>
+              {card}
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </center>
   );
 }

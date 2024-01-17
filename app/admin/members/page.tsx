@@ -42,7 +42,7 @@ function MembersPage() {
   });
 
   // Create rows with centered content, evenly spread across the page's width
-  const containerStyles = {
+  const containerStyles: React.CSSProperties = {
     display: "flex",
     flexDirection: "column", // Display rows vertically
     alignItems: "center", // Center rows horizontally

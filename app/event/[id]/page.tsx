@@ -1,4 +1,3 @@
-// EventsPage.jsx
 "use client";
 
 import { Box, Typography, Paper, Grid } from "@mui/material";
@@ -9,19 +8,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-// Define an interface for the expected structure of the API response
-interface EventData {
-  Event: {
-    Name: string;
-    Date: string;
-    Description: string;
-    // Add other properties as needed
-  };
-  // Add other properties as needed
-}
-
-function getData(params: any): Promise<EventData> {
-  return fetch("https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/event/" + params.id)
+function getData() {
+  return fetch("https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/events")
     .then(res => {
       if (!res.ok) {
         throw Error("Failed to fetch data");
@@ -32,15 +20,16 @@ function getData(params: any): Promise<EventData> {
 
 function EventsPage() {
   const params = useParams();
-  const [data, setData] = useState<EventData>({ Event: { Name: "", Date: "", Description: "" } });
+  const [data, setData] = useState({ "Event": { Name: "", Date: "", Description: "" } });
 
   useEffect(() => {
     let isMounted = true;
 
-    getData(params)
+    getData()
       .then(result => {
         if (isMounted) {
-          setData(result);
+          const dataIndex = decodeURIComponent(String(params.id));
+          setData(result[dataIndex]);
         }
       })
       .catch(error => console.error(error));

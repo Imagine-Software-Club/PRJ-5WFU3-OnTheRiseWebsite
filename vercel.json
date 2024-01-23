@@ -1,0 +1,89 @@
+{
+    "builds": [
+      {"src": "/api/index.py", "use": "@vercel/python"}
+    ],
+    "routes": [
+      {
+        "src": "/events",
+        "methods": ["GET"],
+        "headers": {
+          "Access-Control-Allow-Origin": "https://prj-5-wfu-3-on-the-rise-website-apnf.vercel.app",
+          "Access-Control-Allow-Methods": "GET"
+        },
+        "dest": "api/index.py"
+      },
+      {
+        "src": "/members",
+        "methods": ["GET"],
+        "headers": {
+          "Access-Control-Allow-Origin": "https://prj-5-wfu-3-on-the-rise-website-apnf.vercel.app",
+          "Access-Control-Allow-Methods": "GET"
+        },
+        "dest": "api/index.py"
+      },
+      {
+        "src": "/upcoming",
+        "methods": ["GET"],
+        "headers": {
+          "Access-Control-Allow-Origin": "https://prj-5-wfu-3-on-the-rise-website-apnf.vercel.app",
+          "Access-Control-Allow-Methods": "GET"
+        },
+        "dest": "api/index.py"
+      },
+      {
+        "src": "/past",
+        "methods": ["GET"],
+        "headers": {
+          "Access-Control-Allow-Origin": "https://prj-5-wfu-3-on-the-rise-website-apnf.vercel.app",
+          "Access-Control-Allow-Methods": "GET"
+        },
+        "dest": "api/index.py"
+      },
+      {
+        "src": "/event/(.*)",
+        "methods": ["GET"],
+        "headers": {
+          "Access-Control-Allow-Origin": "https://prj-5-wfu-3-on-the-rise-website-apnf.vercel.app",
+          "Access-Control-Allow-Methods": "GET"
+        },
+        "dest": "api/index.py"
+      },
+      {
+        "src": "/register",
+        "methods": ["POST"],
+        "headers": {
+          "Access-Control-Allow-Origin": "https://prj-5-wfu-3-on-the-rise-website-apnf.vercel.app",
+          "Access-Control-Allow-Methods": "POST"
+        },
+        "dest": "api/index.py"
+      },
+      {
+        "src": "/emailList",
+        "methods": ["POST"],
+        "headers": {
+          "Access-Control-Allow-Origin": "https://prj-5-wfu-3-on-the-rise-website-apnf.vercel.app",
+          "Access-Control-Allow-Methods": "POST"
+        },
+        "dest": "api/index.py"
+      },
+      {
+        "src": "/register",
+        "methods": ["POST"],
+        "headers": {
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "POST"
+        },
+        "dest": "api/index.py"
+      },
+      {
+        "src": "/emailList",
+        "methods": ["POST"],
+        "headers": {
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          "Access-Control-Allow-Methods": "POST"
+        },
+        "dest": "api/index.py"
+      }
+    ]
+  }
+  

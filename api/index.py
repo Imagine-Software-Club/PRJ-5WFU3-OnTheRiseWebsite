@@ -21,10 +21,9 @@ db = firestore.client()
 from fastapi import HTTPException
 
 from fastapi.middleware.cors import CORSMiddleware
-# Allow all origins for CORS (adjust accordingly for production)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -284,3 +283,22 @@ class Member(BaseModel):
     image: str
 
 
+# ------------
+# - OTR Services
+# ------------
+@app.get("/services")
+def upcomingEvents():
+    result = []
+
+    services_ref = db.collection("Services")
+
+    docs = services_ref.stream()
+
+    for doc in docs:
+        if doc.exists:
+            the_service = doc.to_dict()
+            result.append(the_service)
+        else:
+            print("Document does not exist!")
+            
+    return {"Services": result}

@@ -1,84 +1,64 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { TextField, Typography, Button, Box, Container } from "@mui/material";
 
-const Services = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [data, setData] = useState([]);
+import { Box, Typography, Paper, Grid } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { useParams } from 'next/navigation';
+import RegisterForm from "../../../src/components/Forms/registerForm";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { PathParamsContext } from "next/dist/shared/lib/hooks-client-context.shared-runtime";
+
+function getData(params: any) {
+  return fetch("https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/event/" + params.id)
+    .then(res => {
+      if (!res.ok) {
+        throw Error("Failed to fetch data");
+      }
+      return res.json();
+    });
+}
+
+function EventsPage() {
+  const params = useParams();
+  const [data, setData] = useState({ "Name": "", "Date": "", "Description": "" });
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch("https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/services");
-        if (!res.ok) {
-          throw Error("Failed to fetch data");
+    let isMounted = true;
+
+    getData(params)
+      .then(result => {
+        if (isMounted) {
+          setData(result["Event"]);
         }
-        const result = await res.json();
+      })
+      .catch(error => console.error(error));
 
-        setData(result["Services"]);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  const filteredServices = data.filter((service) => {
-    if (service && service.Title) {
-      const titleMatch = service.Title.toLowerCase().includes(searchTerm.toLowerCase());
-
-      if (service.Keywords && typeof service.Keywords === 'string') {
-        const keywordsMatch = service.Keywords.toLowerCase().includes(searchTerm.toLowerCase());
-        return titleMatch || keywordsMatch;
-      }
-
-      return titleMatch;
-    }
-
-    return false;
-  });
+    return () => {
+      isMounted = false;
+    };
+  }, [params]);
 
   return (
-    <Container maxWidth="md" style={{ marginTop: "5%", marginBottom: "5%" }}>
-      <Box p={4} bgcolor="#f5f5f5" borderRadius={10} textAlign="center">
-        <Typography variant="h4" style={{ color: "green", marginBottom: "3%", fontFamily: "cursive" }}>
-          Who We Work With!
-        </Typography>
+    <Box p={3} display="flex" flexDirection="column" alignItems="center">
+      {/* Event Details */}
+      <Paper elevation={3} sx={{ width: "100%", p: 3, mb: 3 }}>
+        <center>
+          <Typography variant="h4">{data["Name"]}</Typography>
+          <Typography variant="body2">Date: {data["Date"]}</Typography>
+          <Typography variant="body1" dangerouslySetInnerHTML={{ __html: data["Description"] }} />
+        </center>
+      </Paper>
 
-        <TextField
-          label="Search by title or keyword"
-          variant="outlined"
-          fullWidth
-          margin="normal"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-
-        {filteredServices.length > 0 ? (
-          filteredServices.map((service, index) => (
-            <Box key={index} mt={3}>
-              <Typography variant="h5" component="div" style={{ marginBottom: "1%" }}>
-                <a href={service.Link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "blue" }}>
-                  {service.Title}
-                </a>
-              </Typography>
-              <Typography variant="body1" style={{ fontStyle: "italic", color: "#555" }}>
-                {service.Description || "No Contact Information"}
-              </Typography>
-            </Box>
-          ))
-        ) : (
-          <Typography variant="body1">No services found.</Typography>
-        )}
-
-        <Button href="/contact-us" style={{ marginTop: "2rem", backgroundColor: "green", color: "white" }}>
-          Interested, Work With Us!
-        </Button>
-      </Box>
-    </Container>
+      {/* Register Form */}
+      <Paper elevation={3} sx={{ width: "100%", p: 3 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <RegisterForm event={data["Name"]}/>
+        </div>
+      </Paper>
+    </Box>
   );
-};
+}
 
-export default Services;
+export default EventsPage;

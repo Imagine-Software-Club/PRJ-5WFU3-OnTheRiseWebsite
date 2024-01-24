@@ -7,6 +7,28 @@ import { Allison, Advent_Pro } from "next/font/google";
 import { map as _map } from "lodash";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from 'firebase/app';
+
+
+import dotenv from 'dotenv';
+dotenv.config();
+
+console.log(process.env.REACT_APP_apiKey)
+
+const firebaseConfig = {
+  apiKey: process.env.REACT_APP_apiKey,
+  authDomain: process.env.REACT_APP_authDomain,
+  projectId: process.env.REACT_APP_projectId,
+  storageBucket: process.env.REACT_APP_storageBucket,
+  messagingSenderId: process.env.REACT_APP_messagingSenderId,
+  appId: process.env.REACT_APP_appId,
+  measurementId: process.env.REACT_APP_measurementId
+};
+
+// Initialize Firebase app
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+
 import {
   AppBar,
   Box,
@@ -22,8 +44,50 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
-import dotenv from 'dotenv';
-dotenv.config();
+const allison = Allison({
+  weight: ["400"],
+  style: ["normal"],
+  display: "swap",
+  subsets: ["latin", "latin-ext", "vietnamese"],
+});
+
+const advent_pro = Advent_Pro({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  style: ["normal", "italic"],
+  display: "swap",
+  subsets: ["cyrillic", "cyrillic-ext", "greek", "latin", "latin-ext"],
+});
+
+const headerLink = [
+  {
+    href: "/about",
+    text: "About Us",
+  },
+  {
+    href: "/events",
+    text: "Events",
+  },
+  {
+    href: "/calendar",
+    text: "Calendar",
+  },
+  {
+    href: "/members",
+    text: "Members",
+  },
+  {
+    href: "/services",
+    text: "Services",
+  },
+  {
+    href: "/contact-us",
+    text: "Contact Us",
+  },
+  {
+    href: "/login",
+    text: "Log In",
+  },
+];
 
 const Header = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -32,85 +96,17 @@ const Header = () => {
     setIsDrawerOpen(open);
   };
 
-  useEffect(() => {
-    const initializeFirebase = async () => {
-      try {
-        console.log(process.env.REACT_APP_apiKey);
-
-        const firebaseConfig = {
-          apiKey: process.env.REACT_APP_apiKey,
-          authDomain: process.env.REACT_APP_authDomain,
-          projectId: process.env.REACT_APP_projectId,
-          storageBucket: process.env.REACT_APP_storageBucket,
-          messagingSenderId: process.env.REACT_APP_messagingSenderId,
-          appId: process.env.REACT_APP_appId,
-          measurementId: process.env.REACT_APP_measurementId
-        };
-
-        // Initialize Firebase app
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        onAuthStateChanged(auth, (user) => {
-          if (user) {
-            const uid = user.uid;
-            console.log("uid", uid);
-          } else {
-            console.log("user is logged out");
-          }
-        });
-      } catch (error) {
-        console.error("Error initializing Firebase:", error);
-      }
-    };
-
-    initializeFirebase();
-  }, []);
-
-  const allison = Allison({
-    weight: ["400"],
-    style: ["normal"],
-    display: "swap",
-    subsets: ["latin", "latin-ext", "vietnamese"],
-  });
-
-  const advent_pro = Advent_Pro({
-    weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-    style: ["normal", "italic"],
-    display: "swap",
-    subsets: ["cyrillic", "cyrillic-ext", "greek", "latin", "latin-ext"],
-  });
-
-  const headerLink = [
-    {
-      href: "/about",
-      text: "About Us",
-    },
-    {
-      href: "/events",
-      text: "Events",
-    },
-    {
-      href: "/calendar",
-      text: "Calendar",
-    },
-    {
-      href: "/members",
-      text: "Members",
-    },
-    {
-      href: "/services",
-      text: "Services",
-    },
-    {
-      href: "/contact-us",
-      text: "Contact Us",
-    },
-    {
-      href: "/login",
-      text: "Log In",
-    },
-  ];
+  useEffect(()=>{
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+          const uid = user.uid;
+          console.log("uid", uid)
+        } else {
+          console.log("user is logged out")
+        }
+      });
+     
+}, [])
 
   return (
     <>

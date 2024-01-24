@@ -8,10 +8,9 @@ import RegisterForm from "../../../src/components/Forms/registerForm";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { PathParamsContext } from "next/dist/shared/lib/hooks-client-context.shared-runtime";
 
-function getData(params: any) {
-  return fetch("https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/event/" + params.id)
+function getData() {
+  return fetch("https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/events")
     .then(res => {
       if (!res.ok) {
         throw Error("Failed to fetch data");
@@ -22,15 +21,16 @@ function getData(params: any) {
 
 function EventsPage() {
   const params = useParams();
-  const [data, setData] = useState({ "Name": "", "Date": "", "Description": "" });
+  const [data, setData] = useState({ Name: "", Date: "", Description: "" });
 
   useEffect(() => {
     let isMounted = true;
 
-    getData(params)
+    getData()
       .then(result => {
         if (isMounted) {
-          setData(result["Event"]);
+          const dataIndex = decodeURIComponent(String(params.id));
+          setData(result[dataIndex]);
         }
       })
       .catch(error => console.error(error));

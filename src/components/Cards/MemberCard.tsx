@@ -1,4 +1,3 @@
-// ... (previous imports)
 'use client'
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardMedia, Typography, Box } from "@mui/material";

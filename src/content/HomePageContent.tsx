@@ -70,18 +70,17 @@ async function getData() {
 
   return res.json();
 }
-// ... (existing imports)
+
 
 interface IEvent {
   Name: string;
   Thumbnail?: string;
   Date: string;
-  // Add other properties as needed
+
 }
 
 interface IEventsData {
   Events: IEvent[];
-  // Add other properties as needed
 }
 
 const HomePageContent: React.FC<IOurMissionProps> = () => {

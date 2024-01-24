@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import List
 from pydantic import EmailStr, BaseModel
 from urllib.parse import unquote
+import os
 
 
 app = FastAPI()
@@ -190,13 +191,13 @@ def registerEvent(item: Register):
 # - Emails
 # ------------
 conf = ConnectionConfig(
-    MAIL_USERNAME="5wfu3.imagine@gmail.com",
-    MAIL_PASSWORD="vkmh fiqx emyi ipta",
+    MAIL_USERNAME="websiteontherise@gmail.com",
+    MAIL_PASSWORD=os.environ.get('App_Password'),
     MAIL_PORT=587,
     MAIL_SERVER="smtp.gmail.com",
     MAIL_STARTTLS=True,
     MAIL_SSL_TLS=False,
-    MAIL_FROM="5wfu3.imagine@gmail.com"
+    MAIL_FROM="websiteontherise@gmail.com"
 )
 
 class EmailSchema(BaseModel):

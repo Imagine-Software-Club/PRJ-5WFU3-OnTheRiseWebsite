@@ -7,13 +7,13 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDN1I86mQrlp0BxQC5KF7gtYwqDlCz6ZQs",
-  authDomain: "otrwebsite-cf4d6.firebaseapp.com",
-  projectId: "otrwebsite-cf4d6",
-  storageBucket: "otrwebsite-cf4d6.appspot.com",
-  messagingSenderId: "933001896271",
-  appId: "1:933001896271:web:1abf3e97f61126776a653a",
-  measurementId: "G-9JRVNRGMLY"
+  apiKey: process.env.apiKey,
+  authDomain: process.env.authDomain,
+  projectId: process.env.projectId,
+  storageBucket: process.env.storageBucket,
+  messagingSenderId: process.env.messagingSenderId,
+  appId: process.env.appId,
+  measurementId: process.env.measurementId
 };
 
 const app = initializeApp(firebaseConfig);

@@ -14,7 +14,6 @@ import Stack from "@mui/material/Stack";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from 'firebase/app';
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyDN1I86mQrlp0BxQC5KF7gtYwqDlCz6ZQs",
   authDomain: "otrwebsite-cf4d6.firebaseapp.com",
@@ -106,15 +105,12 @@ const ServiceRow: React.FC<IServiceRowProps> = ({ title, description, link, keyw
       <Stack direction={{ xs: "column", md: "row" }}>
         <ListItem sx={style}>
           <ListItemText primary={title} />
-          <div style={{ display: "flex", alignItems: "center" }}>
-            {/* <IconButton onClick={handleEdit}>
-              <EditIcon />
-            </IconButton> */}
+          <Box style={{ display: "flex", alignItems: "center" }}>
 
             <IconButton onClick={handleDelete}>
               <ClearIcon />
             </IconButton>
-          </div>
+          </Box>
         </ListItem>
         <Divider />
       </Stack>

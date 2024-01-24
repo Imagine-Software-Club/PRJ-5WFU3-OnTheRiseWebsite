@@ -35,7 +35,7 @@ function ServicesPage() {
     const { Title, Description, Link, keywords} = service;
 
     if (Title) {
-      return <ServiceRow key={index} description={Description} title={Title} link={Link}  keywords = {keywords}/>;
+      return <ServiceRow description={Description} title={Title} link={Link}  keywords = {keywords}/>;
     }
     return null;
   });
@@ -56,8 +56,7 @@ function ServicesPage() {
   return (
     <Box style={containerStyles}>
       <CreateService description="" title="" link=""  keywords = "" />
-      <br/>
-      <br/>
+      
       {serviceRow.map((row, rowIndex) => (
         <Box key={rowIndex} style={rowStyles}>
           {row}

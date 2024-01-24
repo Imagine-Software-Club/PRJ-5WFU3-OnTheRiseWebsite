@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { Box } from "@mui/material";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { initializeApp } from 'firebase/app';
 
@@ -87,11 +88,11 @@ const CreateService: React.FC<CreateServiceProps> = ({ title, description, link,
   };
 
   return (
-    <div>
+    <Box>
       {!userLoggedIn && (
-        <div style={{ color: 'red', marginBottom: '16px' }}>
+        <Box style={{ color: 'red', marginBottom: '16px' }}>
           Warning: You are not logged in. Please log in to add a Service.
-        </div>
+        </Box>
       )}
 
       <TextField label="Title" fullWidth margin="normal" value={formData.title} onChange={handleChange('title')} />
@@ -99,12 +100,17 @@ const CreateService: React.FC<CreateServiceProps> = ({ title, description, link,
       <TextField label="Link" fullWidth margin="normal" value={formData.link} onChange={handleChange('link')} />
       <TextField label="Keywords" fullWidth margin="normal" value={formData.keywords} onChange={handleChange('keywords')} />
 
-      <center>
+      <Box
+  display="flex"
+  justifyContent="center"
+  alignItems="center"
+  minHeight="100vh"
+>
       <Button variant="contained" color="primary" style={{ marginTop: '16px' }} onClick={handleAddService}>
         Add Service
       </Button>
-      </center>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

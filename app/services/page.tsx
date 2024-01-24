@@ -1,47 +1,53 @@
 "use client";
 
-import React, { useState } from "react";
-import { TextField, Typography, Button, Box, Container } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { TextField, Typography, Button, Box, Container, Link } from "@mui/material";
+
+interface Service {
+  Title: string;
+  Keywords?: string;
+  Link: string;
+  Description?: string;
+}
+
+interface AnchorProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {}
 
 const Services = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [data, setData] = useState<Service[]>([]);
 
-  const serviceData = [
-    {
-      number: 1,
-      title: "Potter Park Zoo",
-      description: "Email: message@volunteer2mail.com",
-      link: "https://potterparkzoo.org",
-      keywords: ["zoo", "animals", "volunteer"],
-    },
-    {
-      number: 2,
-      title: "City Rescue Mission of Lansing",
-      description: "Phone: 517-485-0145",
-      link: "https://cityrescuelansing.org",
-      keywords: ["rescue", "mission", "Lansing"],
-    },
-    {
-      number: 3,
-      title: "LMTS",
-      description: "Phone: 517-862-6011",
-      link: "https://lmts.org",
-      keywords: ["LMTS", "organization"],
-    },
-    {
-      number: 4,
-      title: "MMBDS",
-      description: "Email: Sheryl@michiganpremierevents.com, Phone: (517) 242-3759",
-      link: "https://michiganpremierevents.com",
-      keywords: ["MMBDS", "events", "Sheryl"],
-    },
-  ];
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch("https://prj-5-wfu-3-on-the-rise-website-lovat.vercel.app/services");
+        if (!res.ok) {
+          throw Error("Failed to fetch data");
+        }
+        const result = await res.json();
 
-  const filteredServices = serviceData.filter(
-    (service) =>
-      service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      service.keywords.some((keyword) => keyword.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+        setData(result["Services"]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  const filteredServices = data.filter((service) => {
+    if (service && service.Title) {
+      const titleMatch = service.Title.toLowerCase().includes(searchTerm.toLowerCase());
+
+      if (service.Keywords && typeof service.Keywords === 'string') {
+        const keywordsMatch = service.Keywords.toLowerCase().includes(searchTerm.toLowerCase());
+        return titleMatch || keywordsMatch;
+      }
+
+      return titleMatch;
+    }
+
+    return false;
+  });
 
   return (
     <Container maxWidth="md" style={{ marginTop: "5%", marginBottom: "5%" }}>
@@ -56,21 +62,27 @@ const Services = () => {
           fullWidth
           margin="normal"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e: any) => setSearchTerm(e.target.value)}
         />
 
-        {filteredServices.map((service) => (
-          <Box key={service.number} mt={3}>
-            <Typography variant="h5" component="div" style={{ marginBottom: "1%" }}>
-              <a href={service.link} target="_blank" rel="noopener noreferrer">
-                {service.title}
-              </a>
-            </Typography>
-            <Typography variant="body1">{service.description}</Typography>
-          </Box>
-        ))}
+        {filteredServices.length > 0 ? (
+          filteredServices.map((service, index) => (
+            <Box key={index} mt={3}>
+              <Typography variant="h5" component="div" style={{ marginBottom: "1%" }}>
+              <Link href={service.Link} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "blue" }}>
+                {service.Title}
+              </Link>
+              </Typography>
+              <Typography variant="body1" style={{ fontStyle: "italic", color: "#555" }}>
+                {service.Description || "No description available"}
+              </Typography>
+            </Box>
+          ))
+        ) : (
+          <Typography variant="body1">No services found.</Typography>
+        )}
 
-        <Button href = "/contact-us">
+        <Button href="/contact-us" style={{ marginTop: "2rem", backgroundColor: "green", color: "white" }}>
           Interested, Work With Us!
         </Button>
       </Box>

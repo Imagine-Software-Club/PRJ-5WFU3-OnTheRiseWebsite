@@ -1,8 +1,9 @@
-"use client";
+'use client';
 
 import React, { useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import Link from 'next/link';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -64,47 +65,67 @@ const LoginForm = () => {
       <br />
       <br />
     
-    <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
-      
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Login Form</h2>
-      {loggedIn ? (
-        <center>
-          <button style={{ padding: '10px', backgroundColor: '#4caf50', color: 'white', cursor: 'pointer', border: 'none', borderRadius: '4px', transition: 'background-color 0.3s' }} onClick={handleSignOut}>Sign Out</button>
-        </center>
-      ) : (
-        <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={handleLogin}>
-          <label style={{ marginBottom: '8px' }} htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ padding: '8px', marginBottom: '16px' }}
-          />
+      <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+        
+        <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Login Form</h2>
+        {loggedIn ? (
+          <div>
+            <center>
+              <button style={{ padding: '10px', backgroundColor: '#4caf50', color: 'white', cursor: 'pointer', border: 'none', borderRadius: '4px', transition: 'background-color 0.3s' }} onClick={handleSignOut}>Sign Out</button>
+            </center>
+            <br />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <Link href="/admin/events" style={{ textDecoration: 'none', color: 'blue', marginBottom: '10px' }}>Events Admin Access</Link>
+              <Link href="/admin/members" style={{ textDecoration: 'none', color: 'blue', marginBottom: '10px' }}>Members Admin Access</Link>
+              <Link href="/admin/services" style={{ textDecoration: 'none', color: 'blue', marginBottom: '10px' }}>Services Admin Access</Link>
+            </div>
+          </div>
 
-          <label style={{ marginBottom: '8px' }} htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{ padding: '8px', marginBottom: '16px' }}
-          />
+        
+        ) : (
+          <form style={{ display: 'flex', flexDirection: 'column' }} onSubmit={handleLogin}>
+            <label style={{ marginBottom: '8px' }} htmlFor="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={{ padding: '8px', marginBottom: '16px' }}
+            />
 
-          <button style={{ padding: '10px', backgroundColor: '#4caf50', color: 'white', cursor: 'pointer', border: 'none', borderRadius: '4px', transition: 'background-color 0.3s' }} type="submit" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-      )}
+            <label style={{ marginBottom: '8px' }} htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{ padding: '8px', marginBottom: '16px' }}
+            />
 
-      {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
-    </div>
+            <button style={{ padding: '10px', backgroundColor: '#4caf50', color: 'white', cursor: 'pointer', border: 'none', borderRadius: '4px', transition: 'background-color 0.3s' }} type="submit" disabled={loading}>
+              {loading ? 'Logging in...' : 'Login'}
+            </button>
+          </form>
+        )}
+
+        {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
+      </div>
     </div>
   );
+};
+
+const linkStyle = {
+  padding: '8px',
+  backgroundColor: '#2196F3',
+  color: 'white',
+  cursor: 'pointer',
+  borderRadius: '4px',
+  transition: 'background-color 0.3s',
+  textDecoration: 'none',
 };
 
 export default LoginForm;

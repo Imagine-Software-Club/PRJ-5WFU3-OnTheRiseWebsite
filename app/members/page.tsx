@@ -50,7 +50,7 @@ function MembersPage() {
       <Box sx={{ textAlign: "center", margin: "20px 0" }}>
         <br />
         <br />
-        <Grid container spacing={2} justifyContent="center">
+        <Grid container spacing={2} justifyContent="center" mx="auto"> {/* Add mx="auto" for centering */}
           {memberCards.map((card, index) => (
             <Grid item key={index} xs={12} sm={6} md={3} sx={{ textAlign: "center" }}>
               {card}
@@ -60,7 +60,7 @@ function MembersPage() {
       </Box>
     </center>
   );
-}
+};
 
 export default MembersPage;
 export const dynamic = "force-dynamic";

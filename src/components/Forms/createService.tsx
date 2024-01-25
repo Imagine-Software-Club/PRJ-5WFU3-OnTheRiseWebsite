@@ -107,9 +107,9 @@ const CreateService: React.FC<CreateServiceProps> = ({ title, description, link,
   display="flex"
   justifyContent="center"
   alignItems="center"
-  minHeight="100vh"
+  minHeight="10vh"
 >
-      <Button variant="contained" color="primary" style={{ marginTop: '16px' }} onClick={handleAddService}>
+      <Button variant="contained" color="primary" style={{ marginTop: '16px', marginBottom: '16px'}} onClick={handleAddService}>
         Add Service
       </Button>
       </Box>
